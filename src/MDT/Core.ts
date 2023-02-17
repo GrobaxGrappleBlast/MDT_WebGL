@@ -1,9 +1,13 @@
- 
+import _vertexShaderCode    from './shaders/VertexShader.glsl'
+import _fragementShaderCode from './shaders/FragmentShader.glsl'
+
 (window as any).MDTStart = (canvas : HTMLCanvasElement) :Core => {
     const MDTEngine = new Core(canvas);
     return MDTEngine;
 }
  
+ 
+
 export var gl : WebGLRenderingContext = (window as any).gl;
 
 export class Core {
@@ -21,21 +25,40 @@ export class Core {
         gl.clearColor(0.3,0.3,0.3,0.9);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        var VertexShader    = gl.createShader(gl.VERTEX_SHADER);
+        var VertexShader    = gl.createShader(gl.VERTEX_SHADER  );
         var FragmentShader  = gl.createShader(gl.FRAGMENT_SHADER);
-        gl.shaderSource(VertexShader    ,'./shaders/VertexShader.glsl'  );
-        gl.shaderSource(FragmentShader  ,'./shaders/FragmentShader.glsl');
+        gl.shaderSource(VertexShader    , "" + _vertexShaderCode     );
+        gl.shaderSource(FragmentShader  , "" + _fragementShaderCode  );
+
+        // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+        //                  Compiling Shaders                 Compiling Shaders
+        // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+        gl.compileShader(VertexShader);
+        if(!gl.getShaderParameter(VertexShader, gl.COMPILE_STATUS)){
+            console.error("ERROR Compiling Vertex Shader!"      , gl.getShaderInfoLog(VertexShader) );
+            return;
+        }  
+
+        gl.compileShader(FragmentShader);
+        if(!gl.getShaderParameter(FragmentShader, gl.COMPILE_STATUS)){
+            console.error("ERROR Compiling Fragment Shader!"    , gl.getShaderInfoLog(FragmentShader) );
+            return;
+        }
+
 
         var ShaderProgram   = gl.createProgram();
         gl.attachShader(ShaderProgram,VertexShader  );
         gl.attachShader(ShaderProgram,FragmentShader);
-        gl.linkProgram(ShaderProgram);
 
         // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
         //                  Linking Program - means Something, But it cant run without 
         // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+        gl.linkProgram(ShaderProgram);
         if(!gl.getProgramParameter(ShaderProgram,gl.LINK_STATUS)){
-            console.error("Error Linking Program!", gl.getProgramInfoLog(ShaderProgram) )
+            console.error("Error Linking Program!" );
+            console.error(gl.getProgramInfoLog(ShaderProgram));
             return;
         }
 
@@ -50,7 +73,15 @@ export class Core {
             }
         }
 
+        // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+        //             WEBGL Development HERE...
+        // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
+        var triangleVerticies = [
+            0.0,0.5,
+            -0.5,-0.5,
+            0.5,-0.5
+        ]
 
     }
  
