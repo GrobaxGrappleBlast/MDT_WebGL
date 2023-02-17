@@ -42,12 +42,15 @@ export class Core {
         // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
         //                  Validating Program - if there is a compile error in the program
         // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-        if(import.meta.env.VITE_ISDevelopment){
+        // @ts-ignore
+        if(import.meta.env.VITE_ISDevelopment != undefined && import.meta.env.VITE_ISDevelopment == true ){
             gl.validateProgram(ShaderProgram);
             if(!gl.getProgramParameter(ShaderProgram,gl.VALIDATE_STATUS)){
                 console.error("Error Validating Program!", gl.getProgramInfoLog(ShaderProgram) );
             }
         }
+
+
 
     }
  
