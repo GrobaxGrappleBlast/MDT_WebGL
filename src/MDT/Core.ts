@@ -1,6 +1,7 @@
 import _vertexShaderCode    from './shaders/VertexShader.glsl'
 import _fragementShaderCode from './shaders/FragmentShader.glsl'
 import { StandardMaterial } from './Materials/StandardMaterial';
+import { GLTFLoader } from './Loader.ts/GLTFLoader';
 
 (window as any).MDTStart = (canvas : HTMLCanvasElement) :Core => {
     const MDTEngine = new Core(canvas);
@@ -29,6 +30,10 @@ export class Core {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         var mat = new StandardMaterial();
+        var load = new GLTFLoader();
+
+        
+        load.Test("asd");
     }
  
     public StartMDT( ){

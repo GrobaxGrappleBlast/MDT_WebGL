@@ -20,9 +20,7 @@ export class StandardMaterial {
         gl.bindBuffer(gl.ARRAY_BUFFER, triangle);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVerticies),gl.STATIC_DRAW);
 
-
-        this.base.toShaderProgram( (p) => {
-
+        this.base.toShaderProgram( (p) => { 
             var position = gl.getAttribLocation (p,'vertPosition');
             var color = gl.getAttribLocation    (p,'vertColor');
             gl.vertexAttribPointer( 
@@ -37,6 +35,7 @@ export class StandardMaterial {
             gl.useProgram(p);
 
         })
+        
         gl.drawArrays(gl.TRIANGLES, 0 ,3 );
     }
 
