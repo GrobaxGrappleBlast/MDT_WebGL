@@ -1,7 +1,4 @@
 
-interface MatrixOnChangeListener {
-    (): void;
-}
 export abstract class Matrix extends Array<number>{
 
     protected abstract get _dimension (): number;
