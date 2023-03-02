@@ -1,10 +1,10 @@
   
-  export class Vector {
+export class Vector {
 
-    protected _datavalues: number[];
+    protected _data: number[];
   
     public constructor(values: number[]) {
-      this._datavalues = values;
+      this._data = values;
     }
 
     public get length(): number {
@@ -12,11 +12,11 @@
     }
   
     public get dimension(): number {
-      return this._datavalues.length;
+      return this._data.length;
     }
 
     public get values():number[]{
-        return this._datavalues;
+        return this._data;
     }
   
     add(other: Vector): Vector {
@@ -25,7 +25,7 @@
       }
       const result = [];
       for (let i = 0; i < this.dimension; i++) {
-        result.push(this._datavalues[i] + other._datavalues[i]);
+        result.push(this._data[i] + other._data[i]);
       }
       return new Vector(result);
     }
@@ -36,7 +36,7 @@
       }
       const result = [];
       for (let i = 0; i < this.dimension; i++) {
-        result.push(this._datavalues[i] - other._datavalues[i]);
+        result.push(this._data[i] - other._data[i]);
       }
       return new Vector(result);
     }
@@ -44,7 +44,7 @@
     scale(scalar: number): Vector {
       const result = [];
       for (let i = 0; i < this.dimension; i++) {
-        result.push(this._datavalues[i] * scalar);
+        result.push(this._data[i] * scalar);
       }
       return new Vector(result);
     }
@@ -55,7 +55,7 @@
       }
       let result = 0;
       for (let i = 0; i < this.dimension; i++) {
-        result += this._datavalues[i] * other._datavalues[i];
+        result += this._data[i] * other._data[i];
       }
       return result;
     }
@@ -64,8 +64,8 @@
       if (this.dimension !== 3 || other.dimension !== 3) {
         throw new Error('Cross product is only defined for 3D vectors');
       }
-      const [x1, y1, z1] = this._datavalues;
-      const [x2, y2, z2] = other._datavalues;
+      const [x1, y1, z1] = this._data;
+      const [x2, y2, z2] = other._data;
       const result = [
         y1 * z2 - z1 * y2,
         z1 * x2 - x1 * z2,
@@ -81,5 +81,18 @@
       }
       return this.scale(1 / length);
     }
+  }
+  export class Vector2 extends Vector{
+
+    public get x(){return this._data[0];} public set x(v){this._data[0] = v;}
+
+    public constructor(values: number[]) {
+        
+        const [x,y]= values;
+        super([x,y]);
+
+    }
+
+
   }
   

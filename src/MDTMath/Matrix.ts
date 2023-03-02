@@ -82,6 +82,17 @@ export class Matrix {
       }
       return result;
     }
+
+    public toMatrix4() : Matrix4{
+        return new Matrix4(this._data);
+    }
+    public toMatrix3() : Matrix3{
+        return new Matrix3(this._data);
+    }
+    public toMatrix2() : Matrix2{
+        return new Matrix2(this._data);
+    }
+
 }
 export class Matrix2 extends Matrix{
   
@@ -99,18 +110,21 @@ export class Matrix2 extends Matrix{
     public multiply(other: Matrix2 | Matrix | Vector): Matrix2 | Matrix | Vector {
         if(other instanceof Matrix2){
             // --- --- --- --- --- ---
-            //  | a b |      | x y |
-            //  | c d |   *  | z w |
+            //  | m11 m12 |      | a11 a12 | | x y |
+            //  | m21 m22 |   *  | a21 a22 | | z w |
             // --- --- --- --- --- ---
-            //  | ax + bz   ay + bw |
-            //  | cx + dz   cy + dw |
+            //  | m11 * x + m12 * z   m11 * y + m12 * w |
+            //  | m21 * x + m22 * z   m21 * y + m22 * w |
             // --- --- --- --- --- ---
             return new Matrix2(
                 [
-                    [this.m11 * other.m11 + this.m12 * other.m21   , this.m22 * other.m12  + this.m12 * other.m22],
-                    [this.m21 * other.m11 + this.m22 * other.m21   , this.m21 * other.m12  + this.m22 * other.m22]
+                    [(this.m11*other.m11) + (this.m12*other.m21)  ,  (this.m11*other.m12) + (this.m12*other.m22)],
+                    [(this.m21*other.m11) + (this.m22*other.m21)  ,  (this.m21*other.m12) + (this.m22*other.m22)]
                 ]
             );
+
+ 
+
         } else {
             return  super.multiply(other) ;
         }
@@ -215,10 +229,10 @@ export class Matrix4 extends Matrix{
         if(other instanceof Matrix4){
             return new Matrix4(
                 [
-                    [(this.m11*other.m11) + (this.m12*other.m21) + (this.m13*other.m31) +  (this.m14*other.m41) ,  (this.m11*other.m12) + (this.m12*other.m22) + (this.m13*other.m32) + (this.m14*other.m42) ,  (this.m11*other.m13) + (this.m12*other.m23) + (this.m13*other.m33) + (this.m14*other.m43)  ],
-                    [(this.m21*other.m11) + (this.m22*other.m21) + (this.m23*other.m31) +  (this.m24*other.m41) ,  (this.m21*other.m12) + (this.m22*other.m22) + (this.m23*other.m32) + (this.m24*other.m42) ,  (this.m21*other.m13) + (this.m22*other.m23) + (this.m23*other.m33) + (this.m24*other.m43)  ],
-                    [(this.m31*other.m11) + (this.m32*other.m21) + (this.m33*other.m31) +  (this.m34*other.m41) ,  (this.m31*other.m12) + (this.m32*other.m22) + (this.m33*other.m32) + (this.m34*other.m42) ,  (this.m31*other.m13) + (this.m32*other.m23) + (this.m33*other.m33) + (this.m34*other.m43)  ],
-                    [(this.m41*other.m11) + (this.m42*other.m21) + (this.m43*other.m31) +  (this.m44*other.m41) ,  (this.m41*other.m12) + (this.m42*other.m22) + (this.m43*other.m32) + (this.m44*other.m42) ,  (this.m41*other.m13) + (this.m42*other.m23) + (this.m43*other.m33) + (this.m44*other.m43)  ],
+                    [(this.m11*other.m11) + (this.m12*other.m21) + (this.m13*other.m31) +  (this.m14*other.m41) ,  (this.m11*other.m12) + (this.m12*other.m22) + (this.m13*other.m32) + (this.m14*other.m42) ,  (this.m11*other.m13) + (this.m12*other.m23) + (this.m13*other.m33) + (this.m14*other.m43),  (this.m11*other.m14) + (this.m12*other.m24) + (this.m13*other.m34) + (this.m14*other.m44)  ],
+                    [(this.m21*other.m11) + (this.m22*other.m21) + (this.m23*other.m31) +  (this.m24*other.m41) ,  (this.m21*other.m12) + (this.m22*other.m22) + (this.m23*other.m32) + (this.m24*other.m42) ,  (this.m21*other.m13) + (this.m22*other.m23) + (this.m23*other.m33) + (this.m24*other.m43),  (this.m21*other.m14) + (this.m22*other.m24) + (this.m23*other.m34) + (this.m24*other.m44)  ],
+                    [(this.m31*other.m11) + (this.m32*other.m21) + (this.m33*other.m31) +  (this.m34*other.m41) ,  (this.m31*other.m12) + (this.m32*other.m22) + (this.m33*other.m32) + (this.m34*other.m42) ,  (this.m31*other.m13) + (this.m32*other.m23) + (this.m33*other.m33) + (this.m34*other.m43),  (this.m31*other.m14) + (this.m32*other.m24) + (this.m33*other.m34) + (this.m34*other.m44)  ],
+                    [(this.m41*other.m11) + (this.m42*other.m21) + (this.m43*other.m31) +  (this.m44*other.m41) ,  (this.m41*other.m12) + (this.m42*other.m22) + (this.m43*other.m32) + (this.m44*other.m42) ,  (this.m41*other.m13) + (this.m42*other.m23) + (this.m43*other.m33) + (this.m44*other.m43),  (this.m41*other.m14) + (this.m42*other.m24) + (this.m43*other.m34) + (this.m44*other.m44)  ],
                 ]
             );
         } else {
@@ -228,7 +242,6 @@ export class Matrix4 extends Matrix{
     public static identity() : Matrix4{
         return new Matrix4([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
     }
-
     public static RotationMatrixX(angle: number): Matrix4{
         const matrix = Matrix4.identity();
         const c = Math.cos(angle);
