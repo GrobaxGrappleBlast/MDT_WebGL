@@ -239,9 +239,11 @@ export class Matrix4 extends Matrix{
             return  super.multiply(other) ;
         }
     }
+    
     public static identity() : Matrix4{
         return new Matrix4([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
     }
+    
     public static RotationMatrixX(angle: number): Matrix4{
         const matrix = Matrix4.identity();
         const c = Math.cos(angle);
@@ -252,6 +254,7 @@ export class Matrix4 extends Matrix{
         matrix.set(2, 2, c);
         return matrix;
     }
+    
     public static RotationMatrixY(angle: number): Matrix4{
         const matrix = Matrix4.identity();
         const c = Math.cos(angle);
@@ -262,6 +265,7 @@ export class Matrix4 extends Matrix{
         matrix.set(2, 2, c);
         return matrix;
     }
+    
     public static RotationMatrixZ(angle: number): Matrix4{
         const matrix = Matrix4.identity();
         const c = Math.cos(angle);
@@ -272,6 +276,15 @@ export class Matrix4 extends Matrix{
         matrix.set(1, 1, c);
         return matrix;
     }
+
+    private static degreeToRadion = 0.0174532925;
+    
+    public static RotationMatrixX_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
+    
+    public static RotationMatrixY_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
+    
+    public static RotationMatrixZ_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
+    
     public static TranslationMatrix(tx: number, ty: number, tz: number): Matrix4 {
         const matrix = Matrix4.identity();
         matrix.set(0, 3, tx);
@@ -279,6 +292,7 @@ export class Matrix4 extends Matrix{
         matrix.set(2, 3, tz);
         return matrix;
     }
+    
     public static ScalingMatrix(sx: number, sy: number, sz: number): Matrix4{
         const matrix = Matrix4.identity();
         matrix.set(0, 0, sx);

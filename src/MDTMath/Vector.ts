@@ -1,7 +1,7 @@
   
 export class Vector {
 
-    protected _data: number[];
+    public _data: number[];
   
     public constructor(values: number[]) {
       this._data = values;
@@ -82,17 +82,5 @@ export class Vector {
       return this.scale(1 / length);
     }
   }
-  export class Vector2 extends Vector{
 
-    public get x(){return this._data[0];} public set x(v){this._data[0] = v;}
-
-    public constructor(values: number[]) {
-        
-        const [x,y]= values;
-        super([x,y]);
-
-    }
-
-
-  }
   

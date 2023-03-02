@@ -59,3 +59,40 @@ test('Matrix4 times Matrix1x4',()=>{
   expect( vres ).toEqual(vexpected);
   }
 )
+
+// TRANSPOSING
+
+test('Matrix4 transpose',()=>{
+  let m = new Matrix4([
+    [1,2,3,4],
+    [5,6,7,8],
+    [9,10,11,12],
+    [13,14,15,16]
+  ]);
+  let expected = new Matrix4([
+    [1,5,9,13],
+    [2,6,10,14],
+    [3,7,11,15],
+    [4,8,12,16]
+  ]);
+  let res = m.transpose();
+  expect(res).toEqual(expected);
+});
+
+test('Matrix4 transpose identity matrix',()=>{
+  let m = Matrix4.identity();
+  let expected = Matrix4.identity();
+  let res = m.transpose();
+  expect(res).toEqual(expected);
+});
+
+test('Matrix4 transpose twice',()=>{
+  let m = new Matrix4([
+    [1,2,3,4],
+    [5,6,7,8],
+    [9,10,11,12],
+    [13,14,15,16]
+  ]);
+  let res = m.transpose().transpose();
+  expect(res).toEqual(m);
+});
