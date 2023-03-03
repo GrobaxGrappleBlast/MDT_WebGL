@@ -23,9 +23,12 @@ export class Matrix {
       this.numCols = rows[0].length;
     }
   
-    public getRows(): number[][] {
+    public getData(): number[][] {
       return this._data;
     }
+    public getDataArray(): number[] {
+        return this._data.flat();
+      }
   
     public getNumRows(): number {
       return this.numRows;
@@ -89,9 +92,8 @@ export class Matrix {
           result.push(dotProduct);
         }
         return new Vector(result);
-    }
-
-
+    } 
+    
     protected dotProduct(vec1: number[], vec2: number[]): number {
       let result = 0;
       for (let i = 0; i < vec1.length; i++) {
@@ -99,6 +101,7 @@ export class Matrix {
       }
       return result;
     } 
+
     public toMatrix4() : Matrix4{
         return new Matrix4(this._data);
     }

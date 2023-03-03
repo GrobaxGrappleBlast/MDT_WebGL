@@ -1,19 +1,20 @@
 import { Environment } from "../Environment";
-import { Object } from "../Objects/Object";
-import { MDTGeometri } from "./Geometri/MDTGeometri";
-import { MaterialBase } from "./Materials/MaterialBase";
+import { MDTObject } from "../Objects/Object";
+import { MDTGeometri } from "./Geometri/MDTGeometri"; 
+import { StandardMaterial } from "./Materials/StandardMaterial";
 
 
-export class Mesh extends Object{
+export class Mesh extends MDTObject{
     
     private Geometri : MDTGeometri;
-    private Material : MaterialBase; 
-    private isDrawable(): boolean{return this.Geometri != null && this.Material != null};
+    private Material : StandardMaterial; 
+    
+    private vertexBuffer: WebGLBuffer = null;
 
-    public constructor(environment:Environment,Geometri : MDTGeometri,Material : MaterialBase){
+    public constructor(environment:Environment,Geometri : MDTGeometri,Material : StandardMaterial){
             super(environment);
-            this.setGeometri(Geometri);
             this.setMaterial(Material);
+            this.setGeometri(Geometri);            
         /*
         var triangle = this.gl.createBuffer();
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, triangle);
@@ -33,15 +34,18 @@ export class Mesh extends Object{
             this.gl.enableVertexAttribArray(position);
             this.gl.useProgram(p); 
         }) */
-    }
-
+    } 
     public override draw(){
+        this.updateTransform();
 
-        if(!this.isDrawable()){
+        if(this.Material == null)
             return;
-        }
-        
-        this.gl.drawArrays(this.gl.TRIANGLES, 0 , 3 );
+
+        this.Material.use();
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
+        this.gl.vertexAttribPointer(this.Material.vertexPosition, 3, this.gl.FLOAT, false, 0, 0);
+        this.gl.enableVertexAttribArray(0);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, 3);
     }
 
     public setGeometri(Geometri : MDTGeometri){
@@ -50,9 +54,16 @@ export class Mesh extends Object{
             // todo dispose old Geometri
         } 
         this.Geometri = Geometri;
+        
+        // create the buffer
+        this.vertexBuffer = this.gl.createBuffer();
+        // bind the Buffer 
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.Geometri.Verticies), this.gl.STATIC_DRAW);
+
     }
 
-    public setMaterial(Material : MaterialBase){
+    public setMaterial(Material : StandardMaterial){
          
         if(this.Material == undefined || this.Material == null){
             // todo dispose old Material

@@ -1,6 +1,8 @@
 import { Environment } from "../../Environment";
 import { GlAsset } from "../../Objects/Object";
 
+
+
 export class MaterialBase extends GlAsset {
 
     public vertexShader     : WebGLShader ;
@@ -57,7 +59,6 @@ export class MaterialBase extends GlAsset {
         //}
         this.environment = env;
     }
-
 
     protected toShaderProgram( shaderSetting : ((program : WebGLProgram) => any) ){
         shaderSetting.call(this.ShaderProgram, this.ShaderProgram);

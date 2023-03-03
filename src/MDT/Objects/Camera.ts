@@ -1,9 +1,16 @@
 import { Matrix4 } from "../../MDTMath/Matrix"; 
+import { Vector3 } from "../../MDTMath/Vector";
+import { Environment } from "../Environment";
+import { BaseObject } from "./Object";
 
-export class Camera extends Object{
 
-    private cameraMatrix : Matrix4;
-    public get perspektiveMatrix(){return this.cameraMatrix;}
+export class Camera extends BaseObject{
+    
+    
+    
+
+    private _cameraMatrix : Matrix4;
+    public get cameraMatrix     (){return this._cameraMatrix;} 
 
     private _fov          : number = 45;
     private _aspectRatio  : number = 8 / 6;
@@ -15,7 +22,10 @@ export class Camera extends Object{
     public get near         (){ return this._near }       public set near       (v){ this._near = v; }
     public get far          (){ return this._far }        public set far        (v){ this._far = v; }
 
-    public constructor(){   super();}
+    public constructor(environment: Environment){   
+        super(environment);
+        this.toPerspectiveCamera();
+    }
 
     private         createPerspectiveMatrix     (fov  : number, aspectRatio  : number, near :number, far  : number ): Matrix4 {
       
@@ -42,14 +52,9 @@ export class Camera extends Object{
         this._aspectRatio = aspectRatio  || this._aspectRatio ;
         this._near        = near         || this._near        ;
         this._far         = far          || this._far         ; 
-        this.cameraMatrix = this.createPerspectiveMatrix(this._fov, this._aspectRatio , this._near , this._far );
+        this._cameraMatrix = this.createPerspectiveMatrix(this._fov, this._aspectRatio , this._near , this._far );
     }
-    public static   createPerspectiveCamera     (fov? : number, aspectRatio? : number, near?:number, far? : number ): Camera{
-        var camera = new Camera();
-        camera.toPerspectiveCamera(fov,aspectRatio,near,far);
-        return camera;
-    }
-
+ 
     private         createOrthographicMatrix    (fov  : number, aspectRatio  : number, near :number, far  : number ): Matrix4 {
         
         //let fov     = 45;
@@ -80,13 +85,55 @@ export class Camera extends Object{
         this._aspectRatio = aspectRatio  || this._aspectRatio ;
         this._near        = near         || this._near        ;
         this._far         = far          || this._far         ; 
-        this.cameraMatrix = this.createOrthographicMatrix(this._fov, this._aspectRatio , this._near , this._far );
-    }
-    public static   createOrthographicCamera    (fov? : number, aspectRatio? : number, near?:number, far? : number ): Camera{
-        var camera = new Camera();
-        camera.toOrthographicCamera(fov,aspectRatio,near,far);
-        return camera;
+        this._cameraMatrix = this.createOrthographicMatrix(this._fov, this._aspectRatio , this._near , this._far );
     } 
 
- 
+    public lookAt( target: Vector3 ):void {
+
+        var up = new Vector3([0,0,1]);
+
+        // Calculate the forward direction vector
+        var forward = target.subtract(this.transform.location); 
+        forward.normalize();
+
+        //var right = forward.cross(up);
+        //right.normalize();
+
+        // Calculate the new up vector by taking the cross product of the right and forward vectors
+        //var newUp = right.cross(forward);
+        //newUp.normalize(); 
+
+         // Calculate the pitch angle (around the x-axis)
+        var pitch = Math.asin(-forward.x);
+            
+        // Calculate the yaw angle (around the y-axis)
+        var yaw = Math.atan2(-forward.x, -forward.z);
+            
+        // Calculate the roll angle (around the z-axis)
+        var roll = 0;
+            
+        this.transform.rotation = new Vector3([pitch, yaw, roll]);
+
+        // // Create a 4x4 transformation matrix
+        // var lookat = new Matrix4
+        // ([
+        //     [ right.x,newUp.x,-forward.x,0.0 ],
+        //     [ right.y,newUp.y,-forward.y,0.0 ],
+        //     [ right.z,newUp.z,-forward.z,0.0 ],
+        //     [ 0.0    ,0.0    ,0.0       ,1.0 ]
+        // ]);
+        // 
+        // 
+        // //([
+        // //    [ right.x,newUp.x,-forward.x,0.0,],
+        // //    [ right.y,newUp.y,-forward.y,0.0,],
+        // //    [ right.z,newUp.z,-forward.z,0.0,],
+        // //    [ -right.dot( this.transform.location ), -newUp.dot(this.transform.location), forward.dot(this.transform.location),1.0]
+        // //])
+        // 
+        // var v = new Vector3();
+        // return result;
+    }
+      
+
 }   

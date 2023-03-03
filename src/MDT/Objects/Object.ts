@@ -17,10 +17,13 @@ export abstract class BaseObject extends GlAsset{
         super(environment);
         this.transform = new Transform();
     }
+    public updateTransform(): void {
+        this.transform.update();
+    }
 
 }
 
-export abstract class Object extends BaseObject {
+export abstract class MDTObject extends BaseObject {
 
     public constructor(environment: Environment){
         super(environment);

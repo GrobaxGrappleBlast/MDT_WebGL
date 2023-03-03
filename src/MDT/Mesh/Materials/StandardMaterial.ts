@@ -1,51 +1,25 @@
 import _vertexShaderCode    from './shaders/VertexShader.glsl'
-import _fragementShaderCode from './shaders/FragmentShader.glsl'
-import { gl } from '../../Core';
+import _fragementShaderCode from './shaders/FragmentShader.glsl' 
 import { MaterialBase } from './MaterialBase';
-import { Environment } from '../../Environment';
-import { GlAsset } from '../../Objects/Object';
+import { Environment } from '../../Environment'; 
+ 
 
 export class StandardMaterial extends MaterialBase{
 
-    private base : MaterialBase;
-
-    public get vertPosition(){ this.gl.getAttribLocation (p,'vertPosition');}
-
+    private _vertPosition : number = null;
+    public get vertexPosition(){ return this._vertPosition; }
+    
+    private _cameraMatrixUniformLocation : WebGLUniformLocation = null ; 
+    public get cameraMatrixUniformLocation(){ return this._cameraMatrixUniformLocation; }
 
     public constructor( env : Environment){
         super(env,_vertexShaderCode,_fragementShaderCode);
-        gl.drawArrays(gl.TRIANGLES, 0 ,3 );
+        this._vertPosition = this.gl.getAttribLocation (this.ShaderProgram,'vertPosition');
+        this._cameraMatrixUniformLocation = this.gl.getUniformLocation(this.ShaderProgram, "u_cameraMatrix");
     }
-
-    private rebindGeometry(){
-        
-        var triangleVerticies = [
-            0.0,0.5,
-            -0.5,-0.5,
-            0.5,-0.5
-        ]
-
-        var triangle = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, triangle);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVerticies),gl.STATIC_DRAW);
+    
+    public override use(): void {
+        this.gl.uniformMatrix4fv( this._cameraMatrixUniformLocation, false, this.environment.mainCamera.cameraMatrix.getDataArray() );
+        super.use();
     }
-    private rebindMaterial(){
-
-        this.base.toShaderProgram( (p) => { 
-            var position = gl.getAttribLocation (p,'vertPosition');
-            var color = gl.getAttribLocation    (p,'vertColor');
-            gl.vertexAttribPointer( 
-                position,
-                2,
-                gl.FLOAT,
-                false,
-                2 * Float32Array.BYTES_PER_ELEMENT,
-                0
-            );
-            gl.enableVertexAttribArray(position);
-            gl.useProgram(p);
-
-        }) 
-    }
-
 } 

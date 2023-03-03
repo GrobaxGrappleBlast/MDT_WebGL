@@ -1,9 +1,7 @@
   
 export interface IVectorOnChangeListener{
   ( ): any;
-}
-
-
+} 
 abstract class AChangeableVector{
  
 
@@ -64,7 +62,7 @@ abstract class AChangeableVector{
         return this._data;
     }
   
-    add(other: Vector): Vector {
+    public add(other: Vector): Vector {
       if (this.dimension !== other.dimension) {
         throw new Error('Vectors must have the same dimension');
       }
@@ -75,7 +73,7 @@ abstract class AChangeableVector{
       return new Vector(result);
     }
   
-    subtract(other: Vector): Vector {
+    public subtract(other: Vector): Vector {
       if (this.dimension !== other.dimension) {
         throw new Error('Vectors must have the same dimension');
       }
@@ -86,15 +84,7 @@ abstract class AChangeableVector{
       return new Vector(result);
     }
   
-    scale(scalar: number): Vector {
-      const result = [];
-      for (let i = 0; i < this.dimension; i++) {
-        result.push(this._data[i] * scalar);
-      }
-      return new Vector(result);
-    }
-  
-    dot(other: Vector): number {
+    public dot(other: Vector): number {
       if (this.dimension !== other.dimension) {
         throw new Error('Vectors must have the same dimension');
       }
@@ -105,7 +95,7 @@ abstract class AChangeableVector{
       return result;
     }
   
-    cross(other: Vector): Vector {
+    public cross(other: Vector): Vector {
       if (this.dimension !== 3 || other.dimension !== 3) {
         throw new Error('Cross product is only defined for 3D vectors');
       }
@@ -119,15 +109,24 @@ abstract class AChangeableVector{
       return new Vector(result);
     }
   
-    normalize(): Vector {
+    public normalize(): void {
       const length = this.length;
       if (length === 0) {
         throw new Error('Cannot normalize a zero-length vector');
       }
-      return this.scale(1 / length);
+      this.scale(1 / length);
     }
 
-    public SetTo(vector : Vector2){
+    public scale(scalar: number): void {
+      const result = [];
+      for (let i = 0; i < this.dimension; i++) {
+        result.push(this._data[i] * scalar);
+      }
+
+      this._data = result;
+    }
+  
+    public SetTo(vector : Vector){
       this.setAll(vector._data);
     }
 
@@ -153,9 +152,9 @@ abstract class AChangeableVector{
     }
     override add       (other: Vector) : Vector2 {return super.add(other)     as Vector2 ;}
     override subtract  (other: Vector) : Vector2 {return super.subtract(other)as Vector2 ;}
-    override scale     (scalar: number): Vector2 {return super.scale(scalar)  as Vector2 ;}
+    override scale     (scalar: number): void    {       super.scale(scalar) ;            }
     override cross     (other: Vector) : Vector2 {return super.cross(other)   as Vector2 ;}
-    override normalize ()              : Vector2 {return super.normalize()    as Vector2 ;}
+    override normalize ()              : void    {       super.normalize()               ;}
 
     public override SetTo(vector : Vector2){
       this.setAll(vector._data);
@@ -174,9 +173,9 @@ abstract class AChangeableVector{
     }
     override add       (other: Vector) : Vector3 {return super.add(other)     as Vector3 ;}
     override subtract  (other: Vector) : Vector3 {return super.subtract(other)as Vector3 ;}
-    override scale     (scalar: number): Vector3 {return super.scale(scalar)  as Vector3 ;}
+    override scale     (scalar: number): void    {       super.scale(scalar)             ;}
     override cross     (other: Vector) : Vector3 {return super.cross(other)   as Vector3 ;}
-    override normalize ()              : Vector3 {return super.normalize()    as Vector3 ;}
+    override normalize ()              : void    {       super.normalize()               ;}
     
     public override SetTo(vector : Vector3){
       this.setAll(vector._data);
@@ -194,11 +193,12 @@ abstract class AChangeableVector{
       const [x,y,z,c] = values;
       super([x,y,z,c]);
     }
-    override add       (other: Vector) : Vector4 {return super.add(other)     as Vector4 ;}
-    override subtract  (other: Vector) : Vector4 {return super.subtract(other)as Vector4 ;}
-    override scale     (scalar: number): Vector4 {return super.scale(scalar)  as Vector4 ;}
-    override cross     (other: Vector) : Vector4 {return super.cross(other)   as Vector4 ;}
-    override normalize ()              : Vector4 {return super.normalize()    as Vector4 ;}
+    
+    public override add(other: Vector) : Vector4 {return super.add(other)     as Vector4 ;}
+    public override subtract  (other: Vector) : Vector4 {return super.subtract(other)as Vector4 ;}
+    public override cross     (other: Vector) : Vector4 {return super.cross(other)   as Vector4 ;}
+    public override scale     (scalar: number): void    {       super.scale(scalar);             }
+    public override normalize ()              : void    {       super.normalize();               }
 
     public override SetTo(vector : Vector4){
       this.setAll(vector._data);
