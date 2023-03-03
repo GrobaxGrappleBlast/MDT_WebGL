@@ -4,4 +4,7 @@ export abstract class Object {
 
     public transform : Transform;
 
+    public constructor(){
+        this.transform = new Transform();
+    }
 }

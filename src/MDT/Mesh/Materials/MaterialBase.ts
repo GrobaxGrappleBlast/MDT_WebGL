@@ -49,12 +49,12 @@ export class MaterialBase {
         //                  Validating Program - if there is a compile error in the program
         // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
         // @ts-ignore
-        if(import.meta.env.VITE_ISDevelopment != undefined && import.meta.env.VITE_ISDevelopment == true ){
+        //if(import.meta.env.VITE_ISDevelopment != undefined && import.meta.env.VITE_ISDevelopment == true ){
             gl.validateProgram(this.ShaderProgram);
             if(!gl.getProgramParameter(this.ShaderProgram,gl.VALIDATE_STATUS)){
                 console.error("Error Validating Program!", gl.getProgramInfoLog(this.ShaderProgram) );
             }
-        }
+        //}
     }
 
     public toShaderProgram( shaderSetting : ((program : WebGLProgram) => any) ){

@@ -1,8 +1,6 @@
 
-import { GltfAsset, GltfLoader } from 'gltf-loader-ts';
-import { Asset, GlTf } from 'gltf-loader-ts/lib/gltf';
-import { MDTGeometri } from '../Mesh/Geometri/MDTGeometri';
-import { GTLFFile } from './Types/GLTFFile';
+import { GltfLoader } from 'gltf-loader-ts'; 
+import { MDTGeometri } from '../Mesh/Geometri/MDTGeometri'; 
 //import { GTLFFile } from './Types/GLTFFile';
 //import { RawGLTFFile} from './Types/RawGLTFFile';
 
@@ -14,6 +12,8 @@ export class MDTGLTFLoader{
 
     public async Test( url : string ){
  
+        console.log(url);
+        
         let loader = new GltfLoader();
         let uri = './public/3dAssets/storage/Box.gltf';//'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxTextured/glTF/BoxTextured.gltf';
         let asset = await loader.load(uri); 

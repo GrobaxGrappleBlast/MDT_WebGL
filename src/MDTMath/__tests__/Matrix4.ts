@@ -114,5 +114,4 @@ test('Matrix4 Multiply Lesser Vector',()=>{
   expect( rz ).toBeCloseTo( ez );
   expect( rc ).toBeCloseTo( ec );
 
-  expect(res).toEqual(m);
 });

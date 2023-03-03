@@ -207,20 +207,6 @@ export class Matrix4 extends Matrix{
         super(d);
     }
 
-    // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-    // google Chat GPT
-    // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-    // | a11 a12 a13 a14 |      | x11 x12 x13 x14 |
-    // | a21 a22 a23 a24 |   *  | x21 x22 x23 x24 |
-    // | a31 a32 a33 a34 |      | x31 x32 x33 x34 |
-    // | a41 a42 a43 a44 |      | x41 x42 x43 x44 |
-    // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-    // | (a11*x11) + (a12*x21) + (a13*x31)+ (a14*x41)  ,  (a11*x12) + (a12*x22) + (a13*x32) + (a14*x42) ,  (a11*x13) + (a12*x23) + (a13*x33)+ (a14*x43) |
-    // | (a21*x11) + (a22*x21) + (a23*x31)+ (a24*x41)  ,  (a21*x12) + (a22*x22) + (a23*x32) + (a24*x42) ,  (a21*x13) + (a22*x23) + (a23*x33)+ (a24*x43) |
-    // | (a31*x11) + (a32*x21) + (a33*x31)+ (a34*x41)  ,  (a31*x12) + (a32*x22) + (a33*x32) + (a34*x42) ,  (a31*x13) + (a32*x23) + (a33*x33)+ (a34*x43) |
-    // | (a41*x11) + (a42*x21) + (a43*x31)+ (a44*x41)  ,  (a41*x12) + (a42*x22) + (a43*x32) + (a44*x42) ,  (a41*x13) + (a42*x23) + (a43*x33)+ (a44*x43) |
-    // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
     public get m11(){return this._data[0][0];} public set m11(v){this._data[0][0] = v;}
     public get m12(){return this._data[0][1];} public set m12(v){this._data[0][1] = v;} 
     public get m13(){return this._data[0][2];} public set m13(v){this._data[0][2] = v;}
@@ -242,6 +228,20 @@ export class Matrix4 extends Matrix{
     public get m44(){return this._data[3][3];} public set m44(v){this._data[3][3] = v;}  
 
     public multiply(other: Matrix4 | Matrix | Vector): Matrix2 | Matrix | Vector {
+        // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+        // google Chat GPT
+        // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+        // | a11 a12 a13 a14 |      | x11 x12 x13 x14 |
+        // | a21 a22 a23 a24 |   *  | x21 x22 x23 x24 |
+        // | a31 a32 a33 a34 |      | x31 x32 x33 x34 |
+        // | a41 a42 a43 a44 |      | x41 x42 x43 x44 |
+        // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+        // | (a11*x11) + (a12*x21) + (a13*x31)+ (a14*x41)  ,  (a11*x12) + (a12*x22) + (a13*x32) + (a14*x42) ,  (a11*x13) + (a12*x23) + (a13*x33)+ (a14*x43) |
+        // | (a21*x11) + (a22*x21) + (a23*x31)+ (a24*x41)  ,  (a21*x12) + (a22*x22) + (a23*x32) + (a24*x42) ,  (a21*x13) + (a22*x23) + (a23*x33)+ (a24*x43) |
+        // | (a31*x11) + (a32*x21) + (a33*x31)+ (a34*x41)  ,  (a31*x12) + (a32*x22) + (a33*x32) + (a34*x42) ,  (a31*x13) + (a32*x23) + (a33*x33)+ (a34*x43) |
+        // | (a41*x11) + (a42*x21) + (a43*x31)+ (a44*x41)  ,  (a41*x12) + (a42*x22) + (a43*x32) + (a44*x42) ,  (a41*x13) + (a42*x23) + (a43*x33)+ (a44*x43) |
+        // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
         if(other instanceof Matrix4){
             return new Matrix4(
                 [
@@ -296,11 +296,8 @@ export class Matrix4 extends Matrix{
     private static degreeToRadion = 0.0174532925;
     
     public static RotationMatrixX_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
-    
     public static RotationMatrixY_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
-    
     public static RotationMatrixZ_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
-    
     public static TranslationMatrix(tx: number, ty: number, tz: number): Matrix4 {
         const matrix = Matrix4.identity();
         matrix.set(0, 3, tx);
@@ -308,7 +305,6 @@ export class Matrix4 extends Matrix{
         matrix.set(2, 3, tz);
         return matrix;
     }
-    
     public static ScalingMatrix(sx: number, sy: number, sz: number): Matrix4{
         const matrix = Matrix4.identity();
         matrix.set(0, 0, sx);
@@ -317,4 +313,7 @@ export class Matrix4 extends Matrix{
         return matrix;
     }
 
+    public static CreatePerspektiveMatrix(){
+        
+    }
 }

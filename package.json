@@ -13,6 +13,8 @@
     "@types/jest": "^29.4.0",
     "gltf-loader-ts": "^0.3.1",
     "jest": "^29.4.3",
+    "jest-environment-jsdom": "^29.4.3",
+    "jest-transform-stub": "^2.0.0",
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.5",
     "vite": "^4.1.0",
@@ -24,6 +26,7 @@
   },
   "jestConfigurationSource": "// https://github.com/benawad/graphql-ts-server-boilerplate/blob/4_jest/package.json",
   "jest": {
+    "testEnvironment": "jsdom",
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
@@ -35,6 +38,9 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^.+.(vert|frag|glsl)$": "jest-transform-stub"
+    }
   }
 }

@@ -8,21 +8,17 @@ import { Mesh } from './Mesh/Mesh';
     const MDTEngine = new Core(canvas);
     return MDTEngine;
 }
- 
- 
-
+  
 export var gl : WebGLRenderingContext = (window as any).gl;
 
-export class Core {
 
-    
+export class Core {
     private canvas : HTMLCanvasElement;  
     public  constructor(canvas : HTMLCanvasElement) {
-    
         this.canvas = canvas;  
         gl = this.canvas.getContext('webgl');
         if(!gl){
-            alert(
+            throw new Error(
             `Your Browser Does not support WebGl, And therefore the app cannot play.
             Please try again using a different Browser (A browser is a program such
             a Google Chrome, Firefox, Microsoft Edge and others.)`                  );
@@ -31,6 +27,7 @@ export class Core {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
  
         var res = this.initialize();
+        res.then();
     }
  
     public mesh:Mesh;
@@ -47,24 +44,12 @@ export class Core {
         this.Loop();
     }
     
-    public Loop(){
-
+    public Loop(){ 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         if(this.mesh != undefined || this.mesh != null){
             this.mesh.draw(); 
         }
         requestAnimationFrame(this.Loop.bind(this));
-    }
-
-
-
-
-    public static radToDeg(r: number) {
-        return r * 180 / Math.PI;
-    }
-    
-    public static degToRad(d: number) {
-    return d * Math.PI / 180;
-    }
+    } 
 } 
