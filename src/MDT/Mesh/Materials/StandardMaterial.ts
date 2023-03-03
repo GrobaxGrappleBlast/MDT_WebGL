@@ -1,6 +1,6 @@
 import _vertexShaderCode    from './shaders/VertexShader.glsl'
 import _fragementShaderCode from './shaders/FragmentShader.glsl'
-import { gl } from '../Core';
+import { gl } from '../../Core';
 import { MaterialBase } from './MaterialBase';
 
 export class StandardMaterial {

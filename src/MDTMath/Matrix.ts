@@ -11,7 +11,7 @@ export class Matrix {
   
     public set(row: number, col: number, value: number): void {
         this._data[row][col] = value;
-      }
+    }
     
     public get(row: number, col: number): number {
         return this._data[row][col];
@@ -49,16 +49,8 @@ export class Matrix {
   
     public multiply(other: Matrix | Vector): Matrix | Vector {
       if (other instanceof Vector) {
-        // Matrix-vector multiplication
-        const result: number[] = [];
-        for (let i = 0; i < this.numRows; i++) {
-          let dotProduct = 0;
-          for (let j = 0; j < this.numCols; j++) {
-            dotProduct += this._data[i][j] * other.values[j];
-          }
-          result.push(dotProduct);
-        }
-        return new Vector(result);
+        
+        return this.mutliplyVektor(other);
       } else {
         // Matrix-matrix multiplication
         const otherTranspose: Matrix = other.transpose();
@@ -75,14 +67,38 @@ export class Matrix {
       }
     }
   
+    private mutliplyVektor(other:Vector):Vector{
+
+        let values = other.values;
+        if(this.numCols != other.length){
+            
+            let n = new Array<number>();
+            for (let i = 0; i < this.numCols; i++) {
+                n.push(values[i] || 0);
+            }
+            values = n;
+        }
+ 
+        // Matrix-vector multiplication
+        const result: number[] = [];
+        for (let i = 0; i < this.numRows; i++) {
+          let dotProduct = 0;
+          for (let j = 0; j < this.numCols; j++) {
+            dotProduct += this._data[i][j] * values[j];
+          }
+          result.push(dotProduct);
+        }
+        return new Vector(result);
+    }
+
+
     protected dotProduct(vec1: number[], vec2: number[]): number {
       let result = 0;
       for (let i = 0; i < vec1.length; i++) {
         result += vec1[i] * vec2[i];
       }
       return result;
-    }
-
+    } 
     public toMatrix4() : Matrix4{
         return new Matrix4(this._data);
     }

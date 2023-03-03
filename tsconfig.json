@@ -16,5 +16,5 @@
     "skipLibCheck": true,
     "strictNullChecks": false
   },
-  "include": ["src"]
+  "include": ["src", "src/MDTMath/__tests__"]
 }

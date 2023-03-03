@@ -1,5 +1,5 @@
 import {Matrix, Matrix4} from '../Matrix';
-import { Vector } from '../Vector';
+import { Vector, Vector3 } from '../Vector';
 
 test('Matrix4 times Matrix4',()=>{
 
@@ -94,5 +94,25 @@ test('Matrix4 transpose twice',()=>{
     [13,14,15,16]
   ]);
   let res = m.transpose().transpose();
+  expect(res).toEqual(m);
+});
+
+test('Matrix4 Multiply Lesser Vector',()=>{
+  let m = new Matrix4([
+    [1,1,1,1],
+    [1,1,1,1],
+    [1,1,1,1],
+    [1,1,1,1]
+  ]);
+  let v = new Vector3([0,1,1]);
+  let res = m.multiply(v) as Vector3;
+
+  let [ ex , ey ,ez ,ec ] = [2,2,2,2];
+  let [ rx , ry ,rz ,rc ] = res._data;
+  expect( rx ).toBeCloseTo( ex );
+  expect( ry ).toBeCloseTo( ey );
+  expect( rz ).toBeCloseTo( ez );
+  expect( rc ).toBeCloseTo( ec );
+
   expect(res).toEqual(m);
 });

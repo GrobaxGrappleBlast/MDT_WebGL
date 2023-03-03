@@ -1,12 +1,12 @@
 
 import { GltfAsset, GltfLoader } from 'gltf-loader-ts';
 import { Asset, GlTf } from 'gltf-loader-ts/lib/gltf';
-import { MDTGeometri } from '../Mesh/MDTGeometri';
+import { MDTGeometri } from '../Mesh/Geometri/MDTGeometri';
 import { GTLFFile } from './Types/GLTFFile';
 //import { GTLFFile } from './Types/GLTFFile';
 //import { RawGLTFFile} from './Types/RawGLTFFile';
 
-export class GLTFLoader{
+export class MDTGLTFLoader{
 
     public constructor(){
 

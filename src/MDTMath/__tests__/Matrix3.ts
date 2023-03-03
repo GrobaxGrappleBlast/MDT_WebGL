@@ -1,4 +1,4 @@
-import {Matrix, Matrix3} from '../Matrix';
+import {Matrix, Matrix3} from  '../Matrix';
 import { Vector } from '../Vector';
 
 

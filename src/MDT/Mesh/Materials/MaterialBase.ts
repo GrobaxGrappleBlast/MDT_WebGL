@@ -1,4 +1,4 @@
-import { gl } from '../Core';
+import { gl } from '../../Core';
 
 
 export class MaterialBase {

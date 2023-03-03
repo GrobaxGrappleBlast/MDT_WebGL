@@ -1,10 +1,10 @@
 import { Matrix4} from '../Matrix'; 
 import { Vector } from '../Vector';
 
-
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // --- ---  Rotation Z --- ---  Rotation Z --- ---  Rotation Z --- ---  Rotation Z 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
 test('Matrix4 rotation in Z, pi/2',()=>{
 
     let angle = Math.PI/2;
@@ -14,7 +14,6 @@ test('Matrix4 rotation in Z, pi/2',()=>{
     let real = (m.multiply(v) as Vector)._data ;
 
     // --- Test Execution --- --- --- --- --- --- --- ---
-    
     let [ ex , ey ,ez ,ec ] = exspected;
     let [ rx , ry ,rz ,rc ] = real;
     expect( rx ).toBeCloseTo( ex );
@@ -53,10 +52,10 @@ test('Matrix4 rotation in Z, pi/2',()=>{
     expect( rc ).toBeCloseTo( ec );
 })
 
-  
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // --- --- Rotation Y --- --- Rotation Y --- --- Rotation Y --- --- Rotation Y 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
 test('Matrix4 rotation in Y, pi/2',()=>{
 
   let angle = Math.PI/2;

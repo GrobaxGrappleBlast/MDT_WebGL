@@ -2,6 +2,8 @@
 export interface IVectorOnChangeListener{
   ( ): any;
 }
+
+
 abstract class AChangeableVector{
  
 
@@ -37,19 +39,21 @@ abstract class AChangeableVector{
     this._data[i] = v;
     this.onChange();
   }
+
+
   protected get(i:number){
     return this._data[i]; 
   }
 
 }
-export class Vector extends AChangeableVector{
+  export class Vector extends AChangeableVector{
 
     public constructor(values: number[]) {
       super(values);
     }
 
     public get length(): number {
-      return Math.sqrt(this.dot(this));
+      return this._data.length;
     }
   
     public get dimension(): number {
@@ -122,9 +126,19 @@ export class Vector extends AChangeableVector{
       }
       return this.scale(1 / length);
     }
-    
+
     public SetTo(vector : Vector2){
       this.setAll(vector._data);
+    }
+
+    public override toString (){
+      var str = "{"
+      for (let i = 0; i < this.length; i++) {
+          if( i != 0 )
+            str += ",";
+          str += this._data[i] 
+      }
+      return str + "}"
     }
   }
 
