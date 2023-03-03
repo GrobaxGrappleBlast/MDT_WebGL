@@ -1,65 +1,47 @@
-import { gl } from "../Core";
+import { Environment } from "../Environment";
+import { Object } from "../Objects/Object";
 import { MDTGeometri } from "./Geometri/MDTGeometri";
 import { MaterialBase } from "./Materials/MaterialBase";
 
 
-export class Mesh{
-
+export class Mesh extends Object{
+    
     private Geometri : MDTGeometri;
-    private Material : MaterialBase;
+    private Material : MaterialBase; 
     private isDrawable(): boolean{return this.Geometri != null && this.Material != null};
 
-    public constructor(Geometri? : MDTGeometri,Material? : MaterialBase){
-        
-        if(Geometri != undefined || Geometri != null){
+    public constructor(environment:Environment,Geometri : MDTGeometri,Material : MaterialBase){
+            super(environment);
             this.setGeometri(Geometri);
-        }
-
-        if(Material != undefined || Material != null){
             this.setMaterial(Material);
-        } 
-
-        console.log("STOP HER");
-        this.initialize();
-    }
-
-    public initialize(){
-
-        if(!this.isDrawable()){
-            return;
-        }
- 
-        console.log("INITIALIZED STARTED");
-
-        var triangle = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, triangle);
-        gl.bufferData(gl.ARRAY_BUFFER, this.Geometri.Verticies ,gl.STATIC_DRAW);
+        /*
+        var triangle = this.gl.createBuffer();
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, triangle);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.Geometri.Verticies ,this.gl.STATIC_DRAW);
 
         this.Material.toShaderProgram( (p) => { 
-            var position = gl.getAttribLocation (p,'vertPosition');
+            var position = this.gl.getAttribLocation (p,'vertPosition');
             //var color = gl.getAttribLocation    (p,'vertColor');
-            gl.vertexAttribPointer( 
+            this.gl.vertexAttribPointer( 
                 position,
                 2,
-                gl.FLOAT,
+                this.gl.FLOAT,
                 false,
                 2 * Float32Array.BYTES_PER_ELEMENT,
                 0
             );
-            gl.enableVertexAttribArray(position);
-            gl.useProgram(p); 
-        })
-        
-       
+            this.gl.enableVertexAttribArray(position);
+            this.gl.useProgram(p); 
+        }) */
     }
 
-    public draw(){
+    public override draw(){
 
         if(!this.isDrawable()){
             return;
         }
         
-        gl.drawArrays(gl.TRIANGLES, 0 , 3 );
+        this.gl.drawArrays(this.gl.TRIANGLES, 0 , 3 );
     }
 
     public setGeometri(Geometri : MDTGeometri){

@@ -10,8 +10,10 @@ export class Camera extends Object{
     private _near         : number = 0.1;
     private _far          : number = 100.0;
 
-    public get fov(){ return this._fov }public set fov(v){ this._fov = v; }
-
+    public get fov          (){ return this._fov }        public set fov        (v){ this._fov = v; }
+    public get aspectRatio  (){ return this._aspectRatio }public set aspectRatio(v){ this._aspectRatio = v; }
+    public get near         (){ return this._near }       public set near       (v){ this._near = v; }
+    public get far          (){ return this._far }        public set far        (v){ this._far = v; }
 
     public constructor(){   super();}
 

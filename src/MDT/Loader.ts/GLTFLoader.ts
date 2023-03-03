@@ -10,12 +10,10 @@ export class MDTGLTFLoader{
 
     }
 
-    public async Test( url : string ){
+    public async Test( uri : string ){
  
-        console.log(url);
         
         let loader = new GltfLoader();
-        let uri = './public/3dAssets/storage/Box.gltf';//'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxTextured/glTF/BoxTextured.gltf';
         let asset = await loader.load(uri); 
         
         let verts   = await asset.accessorData( asset.gltf.meshes[0].primitives[0].attributes['POSITION']   );

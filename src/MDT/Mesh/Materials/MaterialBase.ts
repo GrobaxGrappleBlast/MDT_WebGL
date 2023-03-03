@@ -1,29 +1,29 @@
-import { gl } from '../../Core';
+import { Environment } from "../../Environment";
+import { GlAsset } from "../../Objects/Object";
 
+export class MaterialBase extends GlAsset {
 
-export class MaterialBase {
+    public vertexShader     : WebGLShader ;
+    public fragmentShader   : WebGLShader ;
+    public ShaderProgram    : WebGLProgram; 
 
-    public vertexShader     : WebGLShader;
-    public fragmentShader   : WebGLShader;
-    public ShaderProgram    : WebGLProgram;
+    public constructor(env:Environment , vertexShadercode : string, fragmentShadercode:string){
+        super(env);
+        this.vertexShader   = env.gl.createShader(env.gl.VERTEX_SHADER  );
+        this.fragmentShader = env.gl.createShader(env.gl.FRAGMENT_SHADER);
 
-    public constructor(vertexShadercode : string, fragmentShadercode:string){
-      
-        this.vertexShader   = gl.createShader(gl.VERTEX_SHADER  );
-        this.fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        env.gl.shaderSource(this.vertexShader    , vertexShadercode      );
+        env.gl.shaderSource(this.fragmentShader  , fragmentShadercode    );
 
-        gl.shaderSource(this.vertexShader    , vertexShadercode      );
-        gl.shaderSource(this.fragmentShader  , fragmentShadercode    );
-
-        gl.compileShader(this.vertexShader);
-        if(!gl.getShaderParameter(this.vertexShader, gl.COMPILE_STATUS)){
-            console.error("ERROR Compiling Vertex Shader!"      , gl.getShaderInfoLog(this.vertexShader) );
+        env.gl.compileShader(this.vertexShader);
+        if(!env.gl.getShaderParameter(this.vertexShader, env.gl.COMPILE_STATUS)){
+            console.error("ERROR Compiling Vertex Shader!"      , env.gl.getShaderInfoLog(this.vertexShader) );
             return;
         }  
 
-        gl.compileShader(this.fragmentShader);
-        if(!gl.getShaderParameter(this.fragmentShader, gl.COMPILE_STATUS)){
-            console.error("ERROR Compiling Fragment Shader!"    , gl.getShaderInfoLog(this.fragmentShader) );
+        env.gl.compileShader(this.fragmentShader);
+        if(!env.gl.getShaderParameter(this.fragmentShader, env.gl.COMPILE_STATUS)){
+            console.error("ERROR Compiling Fragment Shader!"    , env.gl.getShaderInfoLog(this.fragmentShader) );
             return;
         }
 
@@ -34,14 +34,14 @@ export class MaterialBase {
         // see https://registry.khronos.org/OpenGL-Refpages/es2.0/xhtml/glLinkProgram.xml
         // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-        this.ShaderProgram   = gl.createProgram();
-        gl.attachShader(this.ShaderProgram,this.vertexShader  );
-        gl.attachShader(this.ShaderProgram,this.fragmentShader);
+        this.ShaderProgram   = env.gl.createProgram();
+        env.gl.attachShader(this.ShaderProgram,this.vertexShader  );
+        env.gl.attachShader(this.ShaderProgram,this.fragmentShader);
 
-        gl.linkProgram(this.ShaderProgram);
-        if(!gl.getProgramParameter(this.ShaderProgram,gl.LINK_STATUS)){
+        env.gl.linkProgram(this.ShaderProgram);
+        if(!env.gl.getProgramParameter(this.ShaderProgram,env.gl.LINK_STATUS)){
             console.error("Error Linking Program!" );
-            console.error(gl.getProgramInfoLog(this.ShaderProgram));
+            console.error(env.gl.getProgramInfoLog(this.ShaderProgram));
             return;
         }
 
@@ -50,18 +50,20 @@ export class MaterialBase {
         // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
         // @ts-ignore
         //if(import.meta.env.VITE_ISDevelopment != undefined && import.meta.env.VITE_ISDevelopment == true ){
-            gl.validateProgram(this.ShaderProgram);
-            if(!gl.getProgramParameter(this.ShaderProgram,gl.VALIDATE_STATUS)){
-                console.error("Error Validating Program!", gl.getProgramInfoLog(this.ShaderProgram) );
+            env.gl.validateProgram(this.ShaderProgram);
+            if(!env.gl.getProgramParameter(this.ShaderProgram,env.gl.VALIDATE_STATUS)){
+                console.error("Error Validating Program!", env.gl.getProgramInfoLog(this.ShaderProgram) );
             }
         //}
+        this.environment = env;
     }
 
-    public toShaderProgram( shaderSetting : ((program : WebGLProgram) => any) ){
+
+    protected toShaderProgram( shaderSetting : ((program : WebGLProgram) => any) ){
         shaderSetting.call(this.ShaderProgram, this.ShaderProgram);
     }
 
     public use(){
-        gl.useProgram(this.ShaderProgram);
+        this.environment.gl.useProgram(this.ShaderProgram);
     }
 } 
