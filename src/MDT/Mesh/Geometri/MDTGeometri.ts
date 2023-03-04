@@ -3,11 +3,11 @@
 
 export class MDTGeometri{
 
-    public Verticies   : Uint8Array;
-    public Normals     : Uint8Array;
-    public TEXCOORD_0  : Uint8Array;
+    public Verticies   : Float32Array;
+    public Normals     : Float32Array;
+    public TEXCOORD_0  : Float32Array;
     
-    public constructor(Verticies:Uint8Array, Normals:Uint8Array, TexCoordinates:Uint8Array){
+    public constructor(Verticies:Float32Array, Normals:Float32Array, TexCoordinates:Float32Array){
         this.Verticies = Verticies;
         this.Normals = Normals;
         this.TEXCOORD_0 = TexCoordinates;

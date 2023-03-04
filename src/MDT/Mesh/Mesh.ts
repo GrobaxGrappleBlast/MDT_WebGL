@@ -1,4 +1,4 @@
-import { Environment } from "../Environment";
+import { Environment, IEnvironment } from "../Environment";
 import { MDTObject } from "../Objects/Object";
 import { MDTGeometri } from "./Geometri/MDTGeometri"; 
 import { StandardMaterial } from "./Materials/StandardMaterial";
@@ -11,7 +11,7 @@ export class Mesh extends MDTObject{
     
     private vertexBuffer: WebGLBuffer = null;
 
-    public constructor(environment:Environment,Geometri : MDTGeometri,Material : StandardMaterial){
+    public constructor(environment:IEnvironment,Geometri : MDTGeometri,Material : StandardMaterial){
             super(environment);
             this.setMaterial(Material);
             this.setGeometri(Geometri);            
@@ -36,31 +36,40 @@ export class Mesh extends MDTObject{
         }) */
     } 
     public override draw(){
-        console.log("DRAW");
+        
         this.updateTransform();
 
         if(this.Material == null)
             return;
 
         this.Material.use();
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-        this.gl.vertexAttribPointer(this.Material.vertexPosition, 3, this.gl.FLOAT, false, 0, 0);
-        this.gl.enableVertexAttribArray(0);
-        this.gl.drawArrays(this.gl.TRIANGLES, 0, 3);
+        this._bind();
+        this._draw();
     }
 
-    public setGeometri(Geometri : MDTGeometri){
+    protected _bind(){
+        this.environment.gl.bindBuffer              (this.environment.gl.ARRAY_BUFFER, this.vertexBuffer); 
+        this.environment.gl.vertexAttribPointer     (this.Material.vertexPosition, 2, this.environment.gl.FLOAT, false, 0, 0); 
+        this.environment.gl.enableVertexAttribArray (this.Material.vertexPosition);
+    } 
+    protected _draw(){
+        this.gl.clearColor   (0.5, 0.5, 0.5, 0.9);
+        this.gl.enable       (this.gl.DEPTH_TEST); 
+        this.gl.clear        (this.gl.COLOR_BUFFER_BIT);
+        this.gl.viewport     (0,0,600,600);
+        this.environment.gl.drawArrays(this.environment.gl.TRIANGLES, 0, 3);
+    }
 
-        if(this.Geometri == undefined || this.Geometri == null){
-            // todo dispose old Geometri
-        } 
-        this.Geometri = Geometri;
-        
-        // create the buffer
-        this.vertexBuffer = this.gl.createBuffer();
-        // bind the Buffer 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.Geometri.Verticies), this.gl.STATIC_DRAW);
+
+
+    public setGeometri(Geometri : MDTGeometri){
+ 
+        // Create new buffer objects
+        this.vertexBuffer = this.environment.gl.createBuffer();
+        this.environment.gl.bindBuffer(this.environment.gl.ARRAY_BUFFER, this.vertexBuffer);
+        this.environment.gl.bufferData(this.environment.gl.ARRAY_BUFFER, Geometri.Verticies, this.environment.gl.STATIC_DRAW);
+        this.environment.gl.bindBuffer(this.environment.gl.ARRAY_BUFFER, null);
+
     }
 
     public setMaterial(Material : StandardMaterial){ 

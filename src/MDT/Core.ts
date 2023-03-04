@@ -4,6 +4,8 @@ import { Environment, IEnvironment } from './Environment';
 import _vertexShaderCode    from './Mesh/Materials/shaders/VertexShader.glsl'
 import _fragementShaderCode from './Mesh/Materials/shaders/FragmentShader.glsl' 
 import { StandardMaterial } from './Mesh/Materials/StandardMaterial';
+import { MDTGeometri } from './Mesh/Geometri/MDTGeometri';
+import { Mesh } from './Mesh/Mesh';
 
 
 (window as any).MDTStart = (canvas : HTMLCanvasElement) :Core => {
@@ -27,55 +29,46 @@ export class Core implements IEnvironment{
          
         var gl = canvas.getContext('experimental-webgl') as WebGLRenderingContext;
         this.gl = gl;
-         /* Step2: Define the geometry and store it in buffer objects */
+        /* Step2: Define the geometry and store it in buffer objects */
 
-         var vertices = [-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,];
-
-         // Create a new buffer object
-         var vertex_buffer = gl.createBuffer();
-
-         // Bind an empty array buffer to it
-         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-         
-         // Pass the vertices data to the buffer
-         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-         // Unbind the buffer
-         gl.bindBuffer(gl.ARRAY_BUFFER, null);
+        // // Create a new buffer object
+        // var vertex_buffer = gl.createBuffer();
+        // // Bind an empty array buffer to it
+        // gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        // // Pass the vertices data to the buffer
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+        // // Unbind the buffer
+        // gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
          /* Step3: Create and compile Shader programs */
-
-         // --- REVERCING THAT PROGRAM 
+        var vertices = [-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,];
+        var geometri = new MDTGeometri(new Float32Array(vertices),null,null);
+        
+        // --- REVERCING THAT PROGRAM 
         var material = new StandardMaterial(this);
         var shaderProgram = material.ShaderProgram;
         //gl.useProgram(shaderProgram);
-        material.use();
+        //material.use();
+
+        var mesh = new Mesh(this,geometri,material);
+        mesh.draw();
 
          /* Step 4: Associate the shader programs to buffer objects */
-
          //Bind vertex buffer object
-         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer); 
-         gl.vertexAttribPointer(material.vertexPosition, 2, gl.FLOAT, false, 0, 0); 
-         gl.enableVertexAttribArray(material.vertexPosition);
-
-
-
-         /* Step5: Drawing the required object (triangle) */
-
-         // Clear the canvas
-         gl.clearColor(0.5, 0.5, 0.5, 0.9);
-
-         // Enable the depth test
-         gl.enable(gl.DEPTH_TEST); 
-         
-         // Clear the color buffer bit
-         gl.clear(gl.COLOR_BUFFER_BIT);
-
-         // Set the view port
-         gl.viewport(0,0,canvas.width,canvas.height);
-
-         // Draw the triangle
-         gl.drawArrays(gl.TRIANGLES, 0, 3);
+       
+        
+        /* Step5: Drawing the required object (triangle) */
+        // Clear the canvas
+        gl.clearColor(0.5, 0.5, 0.5, 0.9);
+        // Enable the depth test
+        gl.enable(gl.DEPTH_TEST); 
+        // Clear the color buffer bit
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        // Set the view port
+        gl.viewport(0,0,canvas.width,canvas.height);
+        // Draw the triangle
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        //
         /*
         this.gl = canvas.getContext("webgl");
         this.gl.clearColor(0.3,0.3,0.3,0.9);
