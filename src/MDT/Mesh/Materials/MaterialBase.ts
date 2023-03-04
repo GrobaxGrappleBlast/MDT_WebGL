@@ -64,8 +64,7 @@ export class MaterialBase extends GlAsset {
         shaderSetting.call(this.ShaderProgram, this.ShaderProgram);
     }
 
-    public use(){
-        console.log("ser her");
+    public use(){ 
         this.environment.gl.useProgram(this.ShaderProgram);
     }
 } 

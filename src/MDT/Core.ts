@@ -27,49 +27,25 @@ export class Core implements IEnvironment{
 
     private async StartMDT(canvas : HTMLCanvasElement ){ 
          
-        var gl = canvas.getContext('experimental-webgl') as WebGLRenderingContext;
+        var gl = canvas.getContext('webgl') as WebGLRenderingContext;
         this.gl = gl;
-        /* Step2: Define the geometry and store it in buffer objects */
+      
+        var geometri = new MDTGeometri(new Float32Array([-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,]),null,null);
+        var geometri2= new MDTGeometri(new Float32Array([-0.5, 0.5,  0.0, -0.5, 0.5,  0.0,]),null,null);
 
-        // // Create a new buffer object
-        // var vertex_buffer = gl.createBuffer();
-        // // Bind an empty array buffer to it
-        // gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-        // // Pass the vertices data to the buffer
-        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-        // // Unbind the buffer
-        // gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-         /* Step3: Create and compile Shader programs */
-        var vertices = [-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,];
-        var geometri = new MDTGeometri(new Float32Array(vertices),null,null);
+        var mesh = new Mesh(this,geometri ,new StandardMaterial(this));
+        var mesh2= new Mesh(this,geometri2,new StandardMaterial(this));
+        mesh.Material.DiffuseColor.y = 1;
         
-        // --- REVERCING THAT PROGRAM 
-        var material = new StandardMaterial(this);
-        var shaderProgram = material.ShaderProgram;
-        //gl.useProgram(shaderProgram);
-        //material.use();
-
-        var mesh = new Mesh(this,geometri,material);
-        mesh.draw();
-
-         /* Step 4: Associate the shader programs to buffer objects */
-         //Bind vertex buffer object
-       
+        this.gl.clearColor   (0.5, 0.5, 0.5, 0.9);
+        this.gl.enable       (this.gl.DEPTH_TEST); 
+        this.gl.clear        (this.gl.COLOR_BUFFER_BIT);
+        this.gl.viewport     (0,0,canvas.width,canvas.height);
         
-        /* Step5: Drawing the required object (triangle) */
-        // Clear the canvas
-        gl.clearColor(0.5, 0.5, 0.5, 0.9);
-        // Enable the depth test
-        gl.enable(gl.DEPTH_TEST); 
-        // Clear the color buffer bit
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        // Set the view port
-        gl.viewport(0,0,canvas.width,canvas.height);
-        // Draw the triangle
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
-        //
-        /*
+       mesh.draw();
+       mesh2.draw();
+         
+                /*
         this.gl = canvas.getContext("webgl");
         this.gl.clearColor(0.3,0.3,0.3,0.9);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);

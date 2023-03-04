@@ -7,14 +7,14 @@ import { StandardMaterial } from "./Materials/StandardMaterial";
 export class Mesh extends MDTObject{
     
     private Geometri : MDTGeometri;
-    private Material : StandardMaterial; 
-    
+    public  Material : StandardMaterial;  
     private vertexBuffer: WebGLBuffer = null;
 
     public constructor(environment:IEnvironment,Geometri : MDTGeometri,Material : StandardMaterial){
             super(environment);
-            this.setMaterial(Material);
-            this.setGeometri(Geometri);            
+            this.Material = Material;
+            this.Geometri = Geometri;
+            this.CreateBuffers();
         /*
         var triangle = this.gl.createBuffer();
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, triangle);
@@ -35,48 +35,29 @@ export class Mesh extends MDTObject{
             this.gl.useProgram(p); 
         }) */
     } 
-    public override draw(){
-        
-        this.updateTransform();
-
-        if(this.Material == null)
-            return;
-
-        this.Material.use();
-        this._bind();
-        this._draw();
-    }
-
-    protected _bind(){
-        this.environment.gl.bindBuffer              (this.environment.gl.ARRAY_BUFFER, this.vertexBuffer); 
-        this.environment.gl.vertexAttribPointer     (this.Material.vertexPosition, 2, this.environment.gl.FLOAT, false, 0, 0); 
-        this.environment.gl.enableVertexAttribArray (this.Material.vertexPosition);
-    } 
-    protected _draw(){
-        this.gl.clearColor   (0.5, 0.5, 0.5, 0.9);
-        this.gl.enable       (this.gl.DEPTH_TEST); 
-        this.gl.clear        (this.gl.COLOR_BUFFER_BIT);
-        this.gl.viewport     (0,0,600,600);
-        this.environment.gl.drawArrays(this.environment.gl.TRIANGLES, 0, 3);
-    }
-
-
-
-    public setGeometri(Geometri : MDTGeometri){
- 
+    public CreateBuffers(){
         // Create new buffer objects
         this.vertexBuffer = this.environment.gl.createBuffer();
         this.environment.gl.bindBuffer(this.environment.gl.ARRAY_BUFFER, this.vertexBuffer);
-        this.environment.gl.bufferData(this.environment.gl.ARRAY_BUFFER, Geometri.Verticies, this.environment.gl.STATIC_DRAW);
+        this.environment.gl.bufferData(this.environment.gl.ARRAY_BUFFER, this.Geometri.Verticies, this.environment.gl.STATIC_DRAW);
         this.environment.gl.bindBuffer(this.environment.gl.ARRAY_BUFFER, null);
+    } 
+    public override draw(){ 
+        this.updateTransform(); 
+        this._bind();
+        this._draw();
+    } 
+    public _bind(){
+        this.environment.gl.bindBuffer              (this.environment.gl.ARRAY_BUFFER, this.vertexBuffer); 
+        this.environment.gl.vertexAttribPointer     (this.Material.vertexPosition, 2, this.environment.gl.FLOAT, false, 0, 0); 
+        this.environment.gl.enableVertexAttribArray (this.Material.vertexPosition);
+        return;
+    } 
+    public _draw(){
+        this.Material.use(); 
+        this.environment.gl.drawArrays(this.environment.gl.TRIANGLES, 0, this.Geometri.Verticies.length / 2);
+        return;
+    } 
 
-    }
-
-    public setMaterial(Material : StandardMaterial){ 
-        if(this.Material == undefined || this.Material == null){
-            // todo dispose old Material
-        }
-        this.Material = Material;
-    }
 
 }
