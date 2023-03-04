@@ -13,37 +13,35 @@ import { Mesh } from './Mesh/Mesh';
     return MDTEngine;
 }
 
-export class Core implements IEnvironment{
+export class Core{
     
     private environments : Environment[] = []; 
     public  constructor(canvas : HTMLCanvasElement) { 
         this.StartMDT( canvas );
     }
 
-    public gl : WebGLRenderingContext;
-    public vertexShader     : WebGLShader ;
-    public fragmentShader   : WebGLShader ;
-    public ShaderProgram    : WebGLProgram; 
+   
 
     private async StartMDT(canvas : HTMLCanvasElement ){ 
-         
-        var gl = canvas.getContext('webgl') as WebGLRenderingContext;
-        this.gl = gl;
-      
+        
         var geometri = new MDTGeometri(new Float32Array([-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,]),null,null);
-        var geometri2= new MDTGeometri(new Float32Array([-0.5, 0.5,  0.0, -0.5, 0.5,  0.0,]),null,null);
+        var geometri2= new MDTGeometri(new Float32Array([-0.5, 0.5,  0.5,  0.5, 0.5,  0.0,]),null,null);
 
-        var mesh = new Mesh(this,geometri ,new StandardMaterial(this));
-        var mesh2= new Mesh(this,geometri2,new StandardMaterial(this));
-        mesh.Material.DiffuseColor.y = 1;
-        
-        this.gl.clearColor   (0.5, 0.5, 0.5, 0.9);
-        this.gl.enable       (this.gl.DEPTH_TEST); 
-        this.gl.clear        (this.gl.COLOR_BUFFER_BIT);
-        this.gl.viewport     (0,0,canvas.width,canvas.height);
-        
-       mesh.draw();
-       mesh2.draw();
+
+        var env = new Environment("Core",canvas);
+        env.addObject("tri1",geometri );
+        env.addObject("tri2",geometri2);
+        this.environments.push( env  );
+
+        this.Loop();
+        // 
+        // this.gl.clearColor   (0.5, 0.5, 0.5, 0.9);
+        // this.gl.enable       (this.gl.DEPTH_TEST); 
+        // this.gl.clear        (this.gl.COLOR_BUFFER_BIT);
+        // this.gl.viewport     (0,0,canvas.width,canvas.height);
+        // 
+        //mesh.draw();
+        //mesh2.draw();
          
                 /*
         this.gl = canvas.getContext("webgl");
@@ -107,14 +105,8 @@ export class Core implements IEnvironment{
             */
     }
     
-    
-      
-
-
-
-
     public Loop(){ 
-        //this.environments.forEach( p => p.renderFrame() )
+        this.environments.forEach( p => p.renderFrame() )
         //requestAnimationFrame(this.Loop.bind(this));
     } 
 } 

@@ -17,8 +17,6 @@ export class Environment implements IEnvironment{
     public gl : WebGLRenderingContext;  
 
     public constructor(CallerID :String,canvas : HTMLCanvasElement) {
-        
-        
         console.log(CallerID+ " Constructor");
         this.canvas = canvas;  
         this.mainCamera = new Camera(this);
@@ -37,9 +35,9 @@ export class Environment implements IEnvironment{
         }  
 
         this.gl.clearColor(0.3,0.3,0.3,0.9);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-        
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT); 
+        this.gl.viewport     (0,0,canvas.width,canvas.height);
+        this.gl.enable       (this.gl.DEPTH_TEST); 
     }
 
     public addObject( key:string,geo : MDTGeometri ){
@@ -47,7 +45,7 @@ export class Environment implements IEnvironment{
     }
 
     public async renderFrame(){
-        return;
+        
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.mainCamera.updateTransform();
 
