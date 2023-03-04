@@ -1,5 +1,5 @@
 import { Matrix4} from '../Matrix'; 
-import { Vector } from '../Vector';
+import { Vector, Vector4 } from '../Vector'; 
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // --- ---  Rotation Z --- ---  Rotation Z --- ---  Rotation Z --- ---  Rotation Z 
@@ -9,7 +9,7 @@ test('Matrix4 rotation in Z, pi/2',()=>{
 
     let angle = Math.PI/2;
     let m = Matrix4.RotationMatrixZ(angle);
-    let v = new Vector( [    1, 1,  1 ,0   ] );
+    let v = new Vector4( [    1, 1,  1 ,0   ] );
     let exspected =     [   -1, 1,  1 ,0   ];
     let real = (m.multiply(v) as Vector)._data ;
 
@@ -26,7 +26,7 @@ test('Matrix4 rotation in Z, pi/2',()=>{
   
     let angle = Math.PI;
     let m = Matrix4.RotationMatrixZ(angle);
-    let v = new Vector( [    1, 1,1,0   ] );
+    let v = new Vector4( [    1, 1,1,0   ] );
     let exspected =     [   -1,-1,1,0   ];
     let real = (m.multiply(v) as Vector)._data ;
     // --- Test Execution ---
@@ -40,7 +40,7 @@ test('Matrix4 rotation in Z, pi/2',()=>{
   test('Matrix4 rotation in Z, 3 * pi/4',()=>{
     let angle = (Math.PI/2)*3;
     let m = Matrix4.RotationMatrixZ(angle);
-    let v = new Vector( [    1, 1, 1, 0   ] );
+    let v = new Vector4( [    1, 1, 1, 0   ] );
     let exspected =     [    1,-1, 1, 0   ];
     let real = (m.multiply(v) as Vector)._data ;
     // -- Test Execution ---
@@ -60,7 +60,7 @@ test('Matrix4 rotation in Y, pi/2',()=>{
 
   let angle = Math.PI/2;
   let m = Matrix4.RotationMatrixY(angle);
-  let v = new Vector( [    1, 1,  1 ,0   ] );
+  let v = new Vector4( [    1, 1,  1 ,0   ] );
   let exspected =     [    1, 1, -1 ,0   ];
   let real = (m.multiply(v) as Vector)._data ;
 
@@ -77,7 +77,7 @@ test('Matrix4 rotation in Y,  pi',()=>{
 
   let angle = Math.PI;
   let m = Matrix4.RotationMatrixY(angle);
-  let v = new Vector( [    1, 1, 1,0   ] );
+  let v = new Vector4( [    1, 1, 1,0   ] );
   let exspected =     [   -1, 1,-1,0   ];
   let real = (m.multiply(v) as Vector)._data ;
   // --- Test Execution ---
@@ -91,7 +91,7 @@ test('Matrix4 rotation in Y,  pi',()=>{
 test('Matrix4 rotation in Y, 3 * pi/2',()=>{
   let angle = (Math.PI/2)*3;
   let m = Matrix4.RotationMatrixY(angle);
-  let v = new Vector( [    1, 1, 1, 0   ] );
+  let v = new Vector4( [    1, 1, 1, 0   ] );
   let exspected =     [   -1, 1, 1, 0   ];
   let real = (m.multiply(v) as Vector)._data ;
   // -- Test Execution ---
@@ -109,7 +109,7 @@ test('Matrix4 rotation in X, pi/2',()=>{
 
   let angle = Math.PI/2;
   let m = Matrix4.RotationMatrixX(angle);
-  let v = new Vector( [    1, 1,  1 ,0   ] );
+  let v = new Vector4( [    1, 1,  1 ,0   ] );
   let exspected =     [    1,-1,  1 ,0   ];
   let real = (m.multiply(v) as Vector)._data ;
 
@@ -127,7 +127,7 @@ test('Matrix4 rotation in X,  pi',()=>{
 
   let angle = Math.PI;
   let m = Matrix4.RotationMatrixX(angle);
-  let v = new Vector( [    1, 1, 1,0   ] );
+  let v = new Vector4( [    1, 1, 1,0   ] );
   let exspected =     [    1,-1,-1,0   ];
   let real = (m.multiply(v) as Vector)._data ;
   // --- Test Execution ---
@@ -142,7 +142,7 @@ test('Matrix4 rotation in X,  pi',()=>{
 test('Matrix4 rotation in X, 3 * pi/2',()=>{
   let angle = (Math.PI/2)*3;
   let m = Matrix4.RotationMatrixX(angle);
-  let v = new Vector( [    1, 1, 1, 0   ] );
+  let v = new Vector4( [    1, 1, 1, 0   ] );
   let exspected =     [    1, 1,-1, 0   ];
   let real = (m.multiply(v) as Vector)._data ;
   // -- Test Execution ---

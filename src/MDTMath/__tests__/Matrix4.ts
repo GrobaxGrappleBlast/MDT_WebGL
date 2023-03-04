@@ -1,5 +1,5 @@
 import {Matrix, Matrix4} from '../Matrix';
-import { Vector, Vector3 } from '../Vector';
+import { Vector, Vector3, Vector4 } from '../Vector';
 
 test('Matrix4 times Matrix4',()=>{
 
@@ -53,8 +53,8 @@ test('Matrix4 times Matrix1x4',()=>{
   let res = m1.multiply(m2); 
   expect( res ).toEqual(expected);
 
-  let v2 = new Vector ([1,5,9,12]);
-  let vexpected = new Vector([ 518 , 626 , 734 , 842 ]);
+  let v2 = new Vector4([1,5,9,12]);
+  let vexpected = new Vector4([ 518 , 626 , 734 , 842 ]);
   let vres = m1.multiply(v2);
   expect( vres ).toEqual(vexpected);
   }

@@ -36,6 +36,7 @@ export class Mesh extends MDTObject{
         }) */
     } 
     public override draw(){
+        console.log("DRAW");
         this.updateTransform();
 
         if(this.Material == null)
@@ -60,11 +61,9 @@ export class Mesh extends MDTObject{
         // bind the Buffer 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.Geometri.Verticies), this.gl.STATIC_DRAW);
-
     }
 
-    public setMaterial(Material : StandardMaterial){
-         
+    public setMaterial(Material : StandardMaterial){ 
         if(this.Material == undefined || this.Material == null){
             // todo dispose old Material
         }

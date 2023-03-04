@@ -1,4 +1,4 @@
-import { Vector } from "./Vector";
+import { Vector, Vector2, Vector3, Vector4 } from "./Vector";
 
  
 
@@ -73,7 +73,7 @@ export class Matrix {
     private mutliplyVektor(other:Vector):Vector{
 
         let values = other.values;
-        if(this.numCols != other.length){
+        if(this.numCols != other.dimension){
             
             let n = new Array<number>();
             for (let i = 0; i < this.numCols; i++) {
@@ -91,7 +91,8 @@ export class Matrix {
           }
           result.push(dotProduct);
         }
-        return new Vector(result);
+
+        return other._constructor(result);
     } 
     
     protected dotProduct(vec1: number[], vec2: number[]): number {

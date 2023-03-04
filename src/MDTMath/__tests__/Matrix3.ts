@@ -1,5 +1,5 @@
 import {Matrix, Matrix3} from  '../Matrix';
-import { Vector } from '../Vector';
+import { Vector, Vector3 } from '../Vector';
 
 
 test('Matrix3 times Matrix3',()=>{
@@ -39,8 +39,8 @@ test('Matrix3 times Matrix3x1',()=>{
     let res = m1.multiply(m2);
     expect( res ).toEqual(expected);
     
-    let v2 = new Vector ([1,2,3]);
-    let vexpected = new Vector([46, 28, 10]);
+    let v2 = new Vector3([1,2,3]);
+    let vexpected = new Vector3([46, 28, 10]);
     let vres = m1.multiply(v2);
     expect( vres ).toEqual(vexpected);
 }

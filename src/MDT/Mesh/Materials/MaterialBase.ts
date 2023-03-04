@@ -1,4 +1,4 @@
-import { Environment } from "../../Environment";
+import { Environment, IEnvironment } from "../../Environment";
 import { GlAsset } from "../../Objects/Object";
 
 
@@ -9,7 +9,7 @@ export class MaterialBase extends GlAsset {
     public fragmentShader   : WebGLShader ;
     public ShaderProgram    : WebGLProgram; 
 
-    public constructor(env:Environment , vertexShadercode : string, fragmentShadercode:string){
+    public constructor(env:IEnvironment , vertexShadercode : string, fragmentShadercode:string){
         super(env);
         this.vertexShader   = env.gl.createShader(env.gl.VERTEX_SHADER  );
         this.fragmentShader = env.gl.createShader(env.gl.FRAGMENT_SHADER);
@@ -65,6 +65,7 @@ export class MaterialBase extends GlAsset {
     }
 
     public use(){
+        console.log("ser her");
         this.environment.gl.useProgram(this.ShaderProgram);
     }
 } 

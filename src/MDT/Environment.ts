@@ -5,8 +5,10 @@ import { Mesh } from "./Mesh/Mesh";
 import { Camera } from "./Objects/Camera";
 import { MDTObject } from "./Objects/Object";
 
-
-export class Environment{
+export interface IEnvironment{
+    gl : WebGLRenderingContext;
+}
+export class Environment implements IEnvironment{
 
     private objects : {[name:string]:MDTObject}= {};
     public mainCamera: Camera;
@@ -15,6 +17,8 @@ export class Environment{
     public gl : WebGLRenderingContext;  
 
     public constructor(CallerID :String,canvas : HTMLCanvasElement) {
+        
+        
         console.log(CallerID+ " Constructor");
         this.canvas = canvas;  
         this.mainCamera = new Camera(this);
@@ -34,6 +38,8 @@ export class Environment{
 
         this.gl.clearColor(0.3,0.3,0.3,0.9);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+        
     }
 
     public addObject( key:string,geo : MDTGeometri ){
@@ -41,9 +47,8 @@ export class Environment{
     }
 
     public async renderFrame(){
-        
+        return;
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
         this.mainCamera.updateTransform();
 
         for(const key in this.objects){

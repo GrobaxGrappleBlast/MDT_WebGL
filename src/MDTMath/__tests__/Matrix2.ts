@@ -1,5 +1,5 @@
 import {Matrix, Matrix2} from '../Matrix';
-import { Vector } from '../Vector';
+import { Vector, Vector2 } from '../Vector';
 
 test('Matrix2 times Matrix2', () => {
     let m1 = new Matrix2([[1, 2], [3, 4]]);
@@ -16,8 +16,8 @@ test('Matrix2 times Matrix2', () => {
     let res = m1.multiply(m2);
     expect(res).toEqual(expected);
   
-    let v2 = new Vector([5, 6]);
-    let vexpected = new Vector([17, 39]);
+    let v2 = new Vector2([5, 6]);
+    let vexpected = new Vector2([17, 39]);
     let vres = m1.multiply(v2);
     expect(vres).toEqual(vexpected);
   });

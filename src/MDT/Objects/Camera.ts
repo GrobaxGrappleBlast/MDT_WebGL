@@ -47,6 +47,7 @@ export class Camera extends BaseObject{
         ]) 
         return matrix;
     }
+    
     public          toPerspectiveCamera         (fov? : number, aspectRatio? : number, near?:number, far? : number ): void{
         this._fov         = fov          || this._fov         ;
         this._aspectRatio = aspectRatio  || this._aspectRatio ;
@@ -80,6 +81,7 @@ export class Camera extends BaseObject{
         
         return matrix;
     }
+
     public          toOrthographicCamera        (fov? : number, aspectRatio? : number, near?:number, far? : number ): void{
         this._fov         = fov          || this._fov         ;
         this._aspectRatio = aspectRatio  || this._aspectRatio ;
@@ -88,12 +90,15 @@ export class Camera extends BaseObject{
         this._cameraMatrix = this.createOrthographicMatrix(this._fov, this._aspectRatio , this._near , this._far );
     } 
 
-    public lookAt( target: Vector3 ):void {
+    public lookAt( target : Vector3 ):void {
 
-        var up = new Vector3([0,0,1]);
+        console.log("HERE");
+        //var up = new Vector3([0,0,1]);
 
         // Calculate the forward direction vector
-        var forward = target.subtract(this.transform.location); 
+
+        var test = new Vector3([1,2,3]);
+        var forward : Vector3 = target.subtract(this.transform.location); 
         forward.normalize();
 
         //var right = forward.cross(up);
