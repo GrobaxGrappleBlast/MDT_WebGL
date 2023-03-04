@@ -54,16 +54,11 @@ export class Core implements IEnvironment{
          /* Step 4: Associate the shader programs to buffer objects */
 
          //Bind vertex buffer object
-         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer); 
+         gl.vertexAttribPointer(material.vertexPosition, 2, gl.FLOAT, false, 0, 0); 
+         gl.enableVertexAttribArray(material.vertexPosition);
 
-         //Get the attribute location
-         var coord = gl.getAttribLocation(shaderProgram, "vertPosition");
 
-         //point an attribute to the currently bound VBO
-         gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
-
-         //Enable the attribute
-         gl.enableVertexAttribArray(coord);
 
          /* Step5: Drawing the required object (triangle) */
 
