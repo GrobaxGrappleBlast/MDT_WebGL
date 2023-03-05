@@ -45,10 +45,19 @@ export interface IPrimitive {
 }
 
 export interface IAttributes {
-  POSITION: number;
-  NORMAL: number;
-  TEXCOORD_0: number;
-  COLOR_0: number;
+    POSITION    : number;  
+    NORMAL      : number;
+    TANGENT     : number;
+    TEXCOORD_0  : number;    
+    TEXCOORD_1  : number;    
+    COLOR_0     : number;
+    JOINTS_0    : number;  
+    WEIGHTS_0   : number;  
+    JOINTS_1    : number;  
+    WEIGHTS_1   : number;  
+    COLOR_1     : number;
+    TEXCOORD_2  : number;    
+    TEXCOORD_3  : number;
 }
 
 export interface IMaterial {
