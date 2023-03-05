@@ -1,7 +1,5 @@
 
-export class MDTFloat32Array extends Float32Array {
-    
-}
+ 
 
 export class RawGeometri{
 

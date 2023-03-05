@@ -7,22 +7,23 @@ import { MDTObject } from "./Objects/Object";
 
 export interface IEnvironment{
     gl : WebGLRenderingContext;
+    camera : Camera;
 }
 export class Environment implements IEnvironment{
 
     private objects : {[name:string]:MDTObject}= {};
-    public mainCamera: Camera;
-    private canvas : HTMLCanvasElement; 
+    public  camera  : Camera;
+    private canvas  : HTMLCanvasElement; 
 
     public gl : WebGLRenderingContext;  
 
     public constructor(CallerID :String,canvas : HTMLCanvasElement) {
+        
         console.log(CallerID+ " Constructor");
         this.canvas = canvas;  
-        this.mainCamera = new Camera(this);
-        this.mainCamera.transform._location = new Vector3([3,3,3]);
-        this.mainCamera.lookAt(new Vector3([0,0,0]));
-
+        this.camera = new Camera(this);
+        this.camera.transform._location = new Vector3([6,6,2]);
+         
         this.gl = this.canvas.getContext('webgl');
         
         if(!this.gl){
@@ -51,10 +52,11 @@ export class Environment implements IEnvironment{
     public async renderFrame(){
         
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        this.mainCamera.updateTransform();
-
+        this.camera.updateTransform();
+         
         for(const key in this.objects){
             this.objects[key].draw();
         }
+
     }  
 }

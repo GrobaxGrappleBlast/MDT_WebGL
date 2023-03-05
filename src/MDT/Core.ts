@@ -20,9 +20,11 @@ export const loader : Loader = new Loader();
 export class Core{
     
     private environments : Environment[] = []; 
+    
     public  constructor(canvas : HTMLCanvasElement) { 
         this.StartMDT( canvas );
     } 
+
     private async StartMDT(canvas : HTMLCanvasElement ){ 
          
         //var geometri = new RawGeometri(new Float32Array([-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,]),null,null);
@@ -41,6 +43,6 @@ export class Core{
  
     public Loop(){ 
         this.environments.forEach( p => p.renderFrame() )
-        //requestAnimationFrame(this.Loop.bind(this));
+        requestAnimationFrame(this.Loop.bind(this));
     } 
 } 

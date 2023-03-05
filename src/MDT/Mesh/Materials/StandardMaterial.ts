@@ -16,6 +16,9 @@ export class StandardMaterial extends MaterialBase{
     private _cameraMatrixUniformLocation : WebGLUniformLocation = null ; 
     public get cameraMatrixUniformLocation(){ return this._cameraMatrixUniformLocation; }
 
+    private _objectTransformMatrixUniformLocation : WebGLUniformLocation = null ; 
+    public get objectTransformMatrixUniformLocation(){ return this._objectTransformMatrixUniformLocation; }
+
     // Fragment Shader
     private _diffuseColor : WebGLUniformLocation = null ; 
     public get diffuseColorUniformLocation(){ return this._diffuseColor; }
@@ -25,7 +28,8 @@ export class StandardMaterial extends MaterialBase{
 
         // Vertex Shader
         this._vertPosition = this.gl.getAttribLocation (this.ShaderProgram,'vertPosition');
-        this._cameraMatrixUniformLocation = this.gl.getUniformLocation(this.ShaderProgram, "u_cameraMatrix");
+        this._cameraMatrixUniformLocation           = this.gl.getUniformLocation(this.ShaderProgram, "matrix_view");
+        this._objectTransformMatrixUniformLocation  = this.gl.getUniformLocation(this.ShaderProgram, "matrix_transform");
 
         // Fragment Shader
         this._diffuseColor = this.gl.getUniformLocation(this.ShaderProgram,'fragColor')
@@ -35,6 +39,12 @@ export class StandardMaterial extends MaterialBase{
     public override use(): void {
         super.use();
         //this.gl.uniformMatrix4fv( this._cameraMatrixUniformLocation, false, this.environment.mainCamera.cameraMatrix.getDataArray() );
-        this.gl.uniform3fv(this.diffuseColorUniformLocation, new Float32Array(this.DiffuseColor._data));
+        this.gl.uniform3fv(this.diffuseColorUniformLocation         , new Float32Array(this.DiffuseColor._data));
+
+        // Camera and World Matrices 
+        var matrix = this.environment.camera.cameraMatrix.getDataArray();
+        this.gl.uniformMatrix4fv(this._cameraMatrixUniformLocation, false,
+            new Float32Array( matrix  )
+        );
     }
 } 

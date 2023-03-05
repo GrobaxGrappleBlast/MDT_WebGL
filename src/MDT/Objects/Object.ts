@@ -17,6 +17,7 @@ export abstract class BaseObject extends GlAsset{
         super(environment);
         this.transform = new Transform();
     }
+    
     public updateTransform(): void {
         this.transform.update();
     }

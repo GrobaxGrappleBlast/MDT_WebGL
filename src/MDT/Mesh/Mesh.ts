@@ -19,13 +19,14 @@ export class Mesh extends MDTObject{
     } 
     
     public override draw(){ 
+        
         this.updateTransform();
         this.Material.use();
+        this.transform.update(true);
+       
+        this.gl.uniformMatrix4fv(this.Material.objectTransformMatrixUniformLocation, false ,new Float32Array(this.transform.Matrix_transformation.getDataArray()));
         this.primitives.forEach( p => {
             p.draw(this.Material);
         });
-    } 
-    
-
-
+    }  
 }
