@@ -21,7 +21,6 @@ export abstract class BaseObject extends GlAsset{
     public updateTransform(): void {
         this.transform.update();
     }
-
 }
 
 export abstract class MDTObject extends BaseObject {

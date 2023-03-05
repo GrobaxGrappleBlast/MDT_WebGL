@@ -28,5 +28,7 @@ export class Mesh extends MDTObject{
         this.primitives.forEach( p => {
             p.draw(this.Material);
         });
+
+        this.transform.rotation.z += 0.06;
     }  
 }
