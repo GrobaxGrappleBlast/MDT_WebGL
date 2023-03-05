@@ -43,6 +43,9 @@ export class Environment implements IEnvironment{
     public addObject( key:string , geo : RawGeometri ){
         this.objects[key] = new Mesh( this, [geo] , new StandardMaterial(this));
     }
+    public addObjects( key:string , geo : RawGeometri[] ){
+        this.objects[key] = new Mesh( this, geo , new StandardMaterial(this));
+    }
 
     public async renderFrame(){
         

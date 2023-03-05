@@ -13,9 +13,8 @@ export class MDTGLTFLoader implements IFileLoader{
     return loaded;
   }  
 
-  private async parseGLTFFile( url : string): Promise<GLTFFileLoaded>{
-    let raw       = await Loader.LoadFile(url);
-    let rawParsed = JSON.parse(raw) as IGLTFFile;
+  private async parseGLTFFile( file : string): Promise<GLTFFileLoaded>{
+    let rawParsed = JSON.parse(file) as IGLTFFile;
     let GLTF = new GLTFFileLoaded(rawParsed);
     return GLTF;
   }

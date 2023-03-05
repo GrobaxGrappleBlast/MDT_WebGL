@@ -31,12 +31,12 @@ export class Core{
         var env = new Environment("Core",canvas);
         env.addObject("tri1",geometri );
         env.addObject("tri2",geometri2);
-        this.environments.push( env  ); 
+         
 
-        //var data = await loader.loadModel('./public/3dAssets/storage/model.gltf');
-        //console.log("STOP HER");
-        //let a = await MDTGLTFLoader.loadGLTFFileAsync();
+        var geometries = await loader.loadModel('./public/3dAssets/storage/model.gltf');
+        env.addObjects("firstLoaded",geometries);
 
+        this.environments.push( env  );
         this.Loop();
     }
  

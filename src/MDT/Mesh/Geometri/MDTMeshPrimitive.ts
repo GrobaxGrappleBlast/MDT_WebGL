@@ -35,29 +35,4 @@ export class MDTMeshPrimitive extends GlAsset{
         );
         return;
     }   
-    /*
-    public CreateBuffers(){
-        // Create new buffer objects
-        this.vertexBuffer = this.environment.gl.createBuffer();
-        this.environment.gl.bindBuffer(this.environment.gl.ARRAY_BUFFER, this.vertexBuffer);
-        this.environment.gl.bufferData(this.environment.gl.ARRAY_BUFFER, this.Geometri.Verticies, this.environment.gl.STATIC_DRAW);
-        this.environment.gl.bindBuffer(this.environment.gl.ARRAY_BUFFER, null);
-    } 
-    public override draw(){ 
-        this.updateTransform(); 
-        this._bind();
-        this._draw();
-    } 
-    public _bind(){
-        this.environment.gl.bindBuffer              (this.environment.gl.ARRAY_BUFFER, this.vertexBuffer); 
-        this.environment.gl.vertexAttribPointer     (this.Material.vertexPosition, 2, this.environment.gl.FLOAT, false, 0, 0); 
-        this.environment.gl.enableVertexAttribArray (this.Material.vertexPosition);
-        return;
-    } 
-    public _draw(){
-        this.Material.use(); 
-        this.environment.gl.drawArrays(this.environment.gl.TRIANGLES, 0, this.Geometri.Verticies.length / 2);
-        return;
-    } 
-    */
 }

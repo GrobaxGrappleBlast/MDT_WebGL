@@ -33,7 +33,7 @@ export class GLTFFileLoaded {
       });
      
       // ACCESSORS
-      this.accessors;
+      this.accessors =  [];
       raw.accessors.forEach( a => {
         this.accessors.push(new Accessor(a, this));
       });
@@ -45,6 +45,7 @@ export class GLTFFileLoaded {
       });
       
       // BUFFER 
+      this.buffers = [];
       raw.buffers.forEach( b => {
         this.buffers.push( new Buffer(b,this) )
       }); 
@@ -118,18 +119,16 @@ export class Buffer extends GLTFFileComponent {
 
   
   private parseData(buff : IGLTF.IBuffer){
-
-    let encodingArray = buff.uri.split(':')[1].split(';'); // Extract encoding type
-    let buffer        = buff.uri.split(/_(.*)/s)[1]; // splits at first ,
-    
+    const data = buff.uri.split(':')[1]; // Extract encoding type
+    const a  = data.indexOf(',');
+    const encodingArray = data.substring(0, a).split(';');
+    const buffer        = data.substring(a + 1);
     // --- --- --- --- --- --- --- --- --- --- --- --- ---
     // encodingArray = [application/octet-stream][base64]
-    
     this.byteLength   = buff.byteLength;
     this.encodingSpec = encodingArray[0];
     this.encoding     = encodingArray[1];
     this.data = this.decodeGLTFBuffer(buffer,encodingArray[1]);
-
   }
 
   private decodeGLTFBuffer(data: string, encoding: string): Float32Array {
@@ -210,6 +209,7 @@ export class Primitive extends GLTFFileComponent{
   }
 
 }
+
 export enum  AttributeName {
   POSITION   = 'POSITION'   ,  
   NORMAL     = 'NORMAL'     ,  
@@ -225,6 +225,7 @@ export enum  AttributeName {
   TEXCOORD_2 = 'TEXCOORD_2' ,  
   TEXCOORD_3 = 'TEXCOORD_3'
 }
+
 const attributeTypeMap: Record<string, AttributeName> = {
   POSITION   : AttributeName.POSITION   ,
   NORMAL     : AttributeName.NORMAL     ,
