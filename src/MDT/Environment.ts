@@ -1,5 +1,5 @@
-import { Vector3 } from "../MDTMath/Vector";
-import { MDTGeometri } from "./Mesh/Geometri/MDTGeometri";
+import { Vector3 } from "../MDTMath/Vector"; 
+import { RawGeometri } from "./Mesh/Geometri/RawGeometri";
 import { StandardMaterial } from "./Mesh/Materials/StandardMaterial";
 import { Mesh } from "./Mesh/Mesh";
 import { Camera } from "./Objects/Camera";
@@ -40,8 +40,8 @@ export class Environment implements IEnvironment{
         this.gl.enable       (this.gl.DEPTH_TEST); 
     }
 
-    public addObject( key:string , geo : MDTGeometri ){
-        this.objects[key] = new Mesh( this, geo , new StandardMaterial(this));
+    public addObject( key:string , geo : RawGeometri ){
+        this.objects[key] = new Mesh( this, [geo] , new StandardMaterial(this));
     }
 
     public async renderFrame(){

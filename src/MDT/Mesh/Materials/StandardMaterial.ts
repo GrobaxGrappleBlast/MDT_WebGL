@@ -11,7 +11,7 @@ export class StandardMaterial extends MaterialBase{
 
     // Vertex Shader
     private _vertPosition : number = null;
-    public get vertexPosition(){ return this._vertPosition; }
+    public override get vertexPosition(){ return this._vertPosition; }
     
     private _cameraMatrixUniformLocation : WebGLUniformLocation = null ; 
     public get cameraMatrixUniformLocation(){ return this._cameraMatrixUniformLocation; }

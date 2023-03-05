@@ -3,11 +3,13 @@ import { GlAsset } from "../../Objects/Object";
 
 
 
-export class MaterialBase extends GlAsset {
+export abstract class MaterialBase extends GlAsset {
 
     public vertexShader     : WebGLShader ;
     public fragmentShader   : WebGLShader ;
     public ShaderProgram    : WebGLProgram; 
+
+    public abstract get vertexPosition(): number;
 
     public constructor(env:IEnvironment , vertexShadercode : string, fragmentShadercode:string){
         super(env);

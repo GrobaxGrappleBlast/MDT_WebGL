@@ -1,10 +1,7 @@
-import { MDTGeometri } from "../../../MDT/Mesh/Geometri/MDTGeometri";
+
 import { IFileLoader, Loader } from "../../Loader";
 import { GLTFFileLoaded, Buffer } from "./GTLFLoaded";
 import { IGLTFFile } from "./GTLFRaw";
- 
-
-
  
 export class MDTGLTFLoader implements IFileLoader{
     
@@ -22,11 +19,6 @@ export class MDTGLTFLoader implements IFileLoader{
     let GLTF = new GLTFFileLoaded(rawParsed);
     return GLTF;
   }
-
-
-
-
-
 }
     
  

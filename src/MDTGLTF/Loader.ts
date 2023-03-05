@@ -1,4 +1,5 @@
-import { MDTGeometri } from "../MDT/Mesh/Geometri/MDTGeometri";
+
+import { RawGeometri } from "../MDT/Mesh/Geometri/RawGeometri";
 import { GLTFFileLoaded } from "./Loader/GLTF/GTLFLoaded";
 import { MDTGLTFLoader } from "./Loader/GLTF/MDTGLTFLoader";
 
@@ -41,22 +42,16 @@ export class Loader{
         const data  = await Loader.LoadFile(url);
         const model = await loader.parse(data)  as GLTFFileLoaded; 
 
-        let geometries : MDTGeometri[]=[];
+        let geometries : RawGeometri[]=[];
         model.meshes.forEach( m  => {
             m.primitives.forEach( p => {
-                geometries.push(new MDTGeometri( p.Verticies, p.Normals, p.TextureCoordinates ));
+                geometries.push(new RawGeometri( p.Verticies, p.Normals, p.TextureCoordinates ));
             });
         });
 
         return 1;
     } 
-
-
-
-
-
-
-
+ 
     public static async LoadFile(url: string): Promise<string> {
         const response = await fetch(url);
         const data = await response.text();

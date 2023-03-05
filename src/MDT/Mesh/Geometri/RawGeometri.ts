@@ -1,7 +1,7 @@
 
 
 
-export class MDTGeometri{
+export class RawGeometri{
 
     public Verticies   : Float32Array;
     public Normals     : Float32Array;
