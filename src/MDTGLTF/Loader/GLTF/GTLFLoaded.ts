@@ -26,10 +26,11 @@ export class GLTFFileLoaded {
       this.nodes        = raw.nodes       ; 
       this.materials    = raw.materials   ; 
 
+      console.log("GLTF LOADING ");
       // MESHES
       this.meshes       =  [];
       raw.meshes.forEach( m => {
-        new Mesh(m,this);
+        this.meshes.push(new Mesh(m,this));
       });
      
       // ACCESSORS
@@ -40,7 +41,7 @@ export class GLTFFileLoaded {
       
       // BUFFERVIEWS
       this.bufferViews = [];
-      this.bufferViews.forEach(view => {
+      raw.bufferViews.forEach(view => {
          this.bufferViews.push(new BufferView(view,this));
       });
       
@@ -185,7 +186,7 @@ export class Primitive extends GLTFFileComponent{
   } 
 
   private setSinglePrimitive( primitive : IGLTF.IPrimitive, attr : AttributeName ){
-    var exist = ( primitive.attributes as any)[ attr ] == undefined;
+    var exist = ( primitive.attributes as any)[ attr ] != undefined;
     if(exist){
       this.attributes[attr] = ( primitive.attributes as any)[ attr ] as number;
     }

@@ -8,6 +8,7 @@ export class MDTGLTFLoader implements IFileLoader{
   public supports(): string[] {
       return ["gltf"];
   }
+  
   public async parse(file: string) : Promise<GLTFFileLoaded>{
     var loaded : GLTFFileLoaded = await this.parseGLTFFile(file);
     return loaded;

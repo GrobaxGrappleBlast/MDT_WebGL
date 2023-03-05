@@ -25,14 +25,13 @@ export class Core{
     } 
     private async StartMDT(canvas : HTMLCanvasElement ){ 
          
-        var geometri = new RawGeometri(new Float32Array([-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,]),null,null);
-        var geometri2= new RawGeometri(new Float32Array([-0.5, 0.5,  0.5,  0.5, 0.5,  0.0,]),null,null);
+        //var geometri = new RawGeometri(new Float32Array([-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,]),null,null);
+        //var geometri2= new RawGeometri(new Float32Array([-0.5, 0.5,  0.5,  0.5, 0.5,  0.0,]),null,null);
 
         var env = new Environment("Core",canvas);
-        env.addObject("tri1",geometri );
-        env.addObject("tri2",geometri2);
+        // env.addObject("tri1",geometri );
+        // env.addObject("tri2",geometri2);
          
-
         var geometries = await loader.loadModel('./public/3dAssets/storage/model.gltf');
         env.addObjects("firstLoaded",geometries);
 

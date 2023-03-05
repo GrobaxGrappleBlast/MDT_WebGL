@@ -1,5 +1,7 @@
 
-
+export class MDTFloat32Array extends Float32Array {
+    
+}
 
 export class RawGeometri{
 
@@ -11,6 +13,7 @@ export class RawGeometri{
         this.Verticies = Verticies;
         this.Normals = Normals;
         this.TEXCOORD_0 = TexCoordinates;
+        console.log("Float32Array Here!")
     }
     
    
