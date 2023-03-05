@@ -1,0 +1,144 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v3.3.27",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                289
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Model"
+        },
+        {
+            "name" : "leg_base.L",
+            "rotation" : [
+                0.19047805666923523,
+                0.41786617040634155,
+                0.41786620020866394,
+                0.7838965654373169
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                0.9999998807907104
+            ],
+            "translation" : [
+                -8.381903171539307e-09,
+                0.26958784461021423,
+                1.0477378964424133e-07
+            ]
+        },
+        {
+            "children" : [
+                1
+            ],
+            "name" : "pelvis.L",
+            "rotation" : [
+                0.7781710624694824,
+                0.4058308005332947,
+                -0.42956453561782837,
+                0.21266283094882965
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                0.9999999403953552
+            ],
+            "translation" : [
+                0,
+                0.2911585569381714,
+                -1.862645149230957e-09
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "alphaMode" : "BLEND",
+            "doubleSided" : true,
+            "name" : "Defaultskin",
+            "pbrMetallicRoughness" : {}
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Man_01:Proxy",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2,
+                        "COLOR_0" : 3
+                    },
+                    "indices" : 4,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 15502,
+            "max" : [
+                1.1539589166641235,
+                3.4966766834259033,
+                0.7901592254638672
+            ],
+            "min" : [
+                -1.1545789241790771,
+                0.00042007406591437757,
+                -0.19929182529449463
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 15502,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 15502,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 15502,
+            "normalized" : true,
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5123,
+            "count" : 85848,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 186024,
+            "byteOffset" : 0,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 791776,
+            "uri" : "data:application/octet-stream;base64,laG/PeI9QEBL5BA+C2V9PdUtNEBZkW0+I4XHPSJWPEC9jBA+fzeyPbltPECR/xc+SxcQPj2/PUB2/sI9uw4DPgfyPUA3S949K5IkPhliMkA/RWo+i6YBPsxMMkBurnY+eYTvPEcxMkB0CoA+Ty13PRdPMkCmR4E+JhmHPWS2NUAtO1k+peC+PeJHMkCCy38+HQR5Pjn/MEBctza+zIVmPvOaOEDL8A2+v8kkPuj9OEANYyC"
+        }
+    ]
+}

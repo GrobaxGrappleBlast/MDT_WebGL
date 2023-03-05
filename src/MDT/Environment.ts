@@ -40,7 +40,7 @@ export class Environment implements IEnvironment{
         this.gl.enable       (this.gl.DEPTH_TEST); 
     }
 
-    public addObject( key:string,geo : MDTGeometri ){
+    public addObject( key:string , geo : MDTGeometri ){
         this.objects[key] = new Mesh( this, geo , new StandardMaterial(this));
     }
 
