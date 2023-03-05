@@ -1,3 +1,4 @@
+import { mat4 } from "gl-matrix";
 import { Environment, IEnvironment } from "../Environment";
 import { MDTObject } from "../Objects/Object"; 
 import { MDTMeshPrimitive } from "./Geometri/MDTMeshPrimitive";
@@ -20,15 +21,15 @@ export class Mesh extends MDTObject{
     
     public override draw(){ 
         
-        this.updateTransform();
         this.Material.use();
-        this.transform.update(true);
-       
-        this.gl.uniformMatrix4fv(this.Material.objectTransformMatrixUniformLocation, false ,new Float32Array(this.transform.Matrix_transformation.getDataArray()));
+        this.transform.update();
+        
+        this.gl.uniformMatrix4fv(this.Material.objectTransformMatrixUniformLocation, false , (this.transform.Matrix_transformation));
         this.primitives.forEach( p => {
             p.draw(this.Material);
         });
 
-        this.transform.rotation.z += 0.06;
+        this.transform.rotation[2] += 0.02;
+        this.transform.rotation[0] += 0.06;
     }  
 }

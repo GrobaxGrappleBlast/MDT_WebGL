@@ -1,4 +1,4 @@
-import { Vector3 } from "../MDTMath/Vector"; 
+
 import { RawGeometri } from "./Mesh/Geometri/RawGeometri";
 import { StandardMaterial } from "./Mesh/Materials/StandardMaterial";
 import { Mesh } from "./Mesh/Mesh";
@@ -22,7 +22,7 @@ export class Environment implements IEnvironment{
         console.log(CallerID+ " Constructor");
         this.canvas = canvas;  
         this.camera = new Camera(this);
-        this.camera.transform._location = new Vector3([6,6,2]);
+        this.camera.transform.location = [6,6,2];
          
         this.gl = this.canvas.getContext('webgl');
         
@@ -52,11 +52,9 @@ export class Environment implements IEnvironment{
     public async renderFrame(){
         
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        this.camera.updateTransform();
-         
         for(const key in this.objects){
             this.objects[key].draw();
         }
-
+        this.camera.update(); 
     }  
 }

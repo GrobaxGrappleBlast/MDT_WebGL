@@ -10,6 +10,6 @@ attribute vec3 vertColor;
 void main(){
   
 
-    gl_Position = matrix_transform * vec4(vertPosition, 1.0);
+    gl_Position =  matrix_view * vec4(vertPosition, 1.0);
     //gl_Position = vec4(vertPosition,1.0);
 }

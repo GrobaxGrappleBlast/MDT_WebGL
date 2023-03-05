@@ -10,8 +10,7 @@ export class RawGeometri{
     public constructor(Verticies:Float32Array, Normals:Float32Array, TexCoordinates:Float32Array){
         this.Verticies = Verticies;
         this.Normals = Normals;
-        this.TEXCOORD_0 = TexCoordinates;
-        console.log("Float32Array Here!")
+        this.TEXCOORD_0 = TexCoordinates; 
     }
     
    
