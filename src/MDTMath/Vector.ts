@@ -1,13 +1,11 @@
+import { IOnChangeSubscriber } from "../MDTInterfaces/IOnChangeListener";
+
   
-export interface IVectorOnChangeListener{
-  ( ): any;
-} 
+ 
  
 abstract class AChangeableVector{
- 
-
-  protected listeners : { [name : string ]: IVectorOnChangeListener} = {};
-  public addListener(name:string, call : IVectorOnChangeListener ){
+  protected listeners : { [name : string ]: IOnChangeSubscriber} = {};
+  public addOnChangeListener(name:string, call : IOnChangeSubscriber ){
     this.listeners[name] = call;
   }
   public removeListener(name:string){

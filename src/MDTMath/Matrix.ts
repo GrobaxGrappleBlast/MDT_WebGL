@@ -26,9 +26,12 @@ export class Matrix {
     public getData(): number[][] {
       return this._data;
     }
+    
     public getDataArray(): number[] {
-        return this._data.flat();
-      }
+        let arr = [];
+        for (var row of this._data) for ( var e of row) arr.push(e);
+        return arr;
+    }
   
     public getNumRows(): number {
       return this.numRows;
@@ -205,6 +208,8 @@ export class Matrix3 extends Matrix{
 }
 export class Matrix4 extends Matrix{
   
+    private static degreeToRadion = 0.0174532925;
+
     constructor(rows: number[][]) {
         const [[x1, x2, x3, x4], [y1,y2,y3,y4], [z1,z2,z3,z4], [c1,c2,c3,c4]]= rows;
         let d =  [[x1, x2, x3, x4], [y1,y2,y3,y4], [z1,z2,z3,z4], [c1,c2,c3,c4]];
@@ -296,12 +301,6 @@ export class Matrix4 extends Matrix{
         matrix.set(1, 1, c);
         return matrix;
     }
-
-    private static degreeToRadion = 0.0174532925;
-    
-    public static RotationMatrixX_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
-    public static RotationMatrixY_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
-    public static RotationMatrixZ_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
     public static TranslationMatrix(tx: number, ty: number, tz: number): Matrix4 {
         const matrix = Matrix4.identity();
         matrix.set(0, 3, tx);
@@ -316,8 +315,7 @@ export class Matrix4 extends Matrix{
         matrix.set(2, 2, sz);
         return matrix;
     }
-
-    public static CreatePerspektiveMatrix(){
-        
-    }
+    public static RotationMatrixX_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
+    public static RotationMatrixY_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
+    public static RotationMatrixZ_Degree(angle: number): Matrix4{ return Matrix4.RotationMatrixX(angle * Matrix4.degreeToRadion ); }
 }
