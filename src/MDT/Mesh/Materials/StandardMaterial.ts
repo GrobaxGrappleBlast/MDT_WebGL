@@ -36,33 +36,12 @@ export class StandardMaterial extends MaterialBase{
         
     }
     
+    private first = true;
     public override use(): void {
         super.use();
-        //this.gl.uniformMatrix4fv( this._cameraMatrixUniformLocation, false, this.environment.mainCamera.cameraMatrix.getDataArray() );
-       // this.gl.uniform3fv(this.diffuseColorUniformLocation         , new Float32Array(this.DiffuseColor._data));
-
+        // this.gl.uniformMatrix4fv( this._cameraMatrixUniformLocation, false, this.environment.mainCamera.cameraMatrix.getDataArray() );
+        // this.gl.uniform3fv(this.diffuseColorUniformLocation         , new Float32Array(this.DiffuseColor._data));
         // Camera and World Matrices 
 
-        const matrix = mat4.create();
-        const projectionMatrix = mat4.create();
-        mat4.perspective(projectionMatrix, 
-            75 * Math.PI/180, // vertical field-of-view (angle, radians)
-            0.5, // aspect W/H
-            1e-4, // near cull distance
-            1e4 // far cull distance
-        );
-        
-        const finalMatrix = mat4.create();
-        
-        
-        mat4.translate  ( matrix     , matrix          , [.1, .5, -2]   );
-        mat4.rotateZ    ( matrix     , matrix          , Math.PI/2 / 70 );
-        mat4.multiply   ( finalMatrix, projectionMatrix, matrix         );
-        //console.log("0:::"+finalMatrix.toString() + "\n1:::" + this.environment.camera.cameraMatrix.toString() );
-
-         
-        this.gl.uniformMatrix4fv(this._cameraMatrixUniformLocation, false,
-            finalMatrix
-        );
     }
 } 

@@ -15,17 +15,13 @@ export abstract class ACamera extends GlAsset{
 
 export class Camera extends ACamera {
 
-    private perspectiveMatrix   : mat4 = mat4.create();
-    private _cameraMatrix       : mat4 = mat4.create();
+    private projectionMatrix   : mat4 = mat4.create();
+    public  cameraMatrix        : mat4 = mat4.create();
 
-    public get cameraMatrix     (){ 
-        var a = this._cameraMatrix;
-        return a;
-    }
 
     protected _fov          : number = 75 * Math.PI/180;
     protected _aspectRatio  : number = 0.5;
-    protected _near         : number = 0.00000001;
+    protected _near         : number = 1e-4;
     protected _far          : number = 100.0;
 
     public get fov          (){ return this._fov }        public set fov        (v){ this._fov = v;         }
@@ -53,17 +49,17 @@ export class Camera extends ACamera {
             return;
         }
         this.transform.update();
-        mat4.multiply( this._cameraMatrix,this.perspectiveMatrix, this.transform.Matrix_transformation);
+        mat4.multiply( this.cameraMatrix, this.projectionMatrix,  this.transform.Matrix_transformation);
         this.isDirty = false;
     }
 
     public toPerspectiveCamera (fov : number, aspectRatio : number, near:number, far : number ): void{
-        mat4.identity(this.perspectiveMatrix);
-        mat4.perspective(this.perspectiveMatrix, fov,aspectRatio,near,far);
+        mat4.identity(this.projectionMatrix);
+        mat4.perspective(this.projectionMatrix, fov,aspectRatio,near,far);
     }
    
     public toOrthographicCamera (left:number,right:number,bottom:number,top:number,near:number,far:number ): void{
-        mat4.identity(this.perspectiveMatrix);
-        mat4.ortho(this.perspectiveMatrix,left,right,bottom,top,near,far);
+        mat4.identity(this.projectionMatrix);
+        mat4.ortho(this.projectionMatrix,left,right,bottom,top,near,far);
     } 
 }   

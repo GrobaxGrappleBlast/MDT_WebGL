@@ -15,7 +15,7 @@ export class CameraTransform {
         this._location = v;
         this.isDirty = true;}
   
-    private Matrix_translation    : mat4; 
+    public  _Matrix_translation    : mat4; 
     public  Matrix_transformation : mat4;
 
     public isDirty : boolean = true;
@@ -28,10 +28,10 @@ export class CameraTransform {
         this.targetVector = vec3.create();
 
         this._location = vec3.create();
-        this.Matrix_translation    = mat4.create(); 
+        this._Matrix_translation    = mat4.create(); 
         this.Matrix_transformation = mat4.create();
 
-        mat4.identity(this.Matrix_translation    ); 
+        mat4.identity(this._Matrix_translation    ); 
         mat4.identity(this.Matrix_transformation );
 
 
@@ -45,8 +45,8 @@ export class CameraTransform {
         }
         
         //mat4.lookAt     ( this.Matrix_transformation,this._location,this.targetVector,this.upVector);
-        mat4.translate  ( this.Matrix_translation,mat4.create(),this._location);
-        this.Matrix_transformation = this.Matrix_translation;
+        mat4.translate  ( this.Matrix_transformation,mat4.create(),this._location);
+        //this.Matrix_transformation = this._Matrix_translation;
         //mat4.multiply   ( this.Matrix_transformation,this.Matrix_transformation,this.Matrix_transformation )
 
         this.isDirty = false;  
