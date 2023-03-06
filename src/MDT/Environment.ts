@@ -22,7 +22,7 @@ export class Environment implements IEnvironment{
         console.log(CallerID+ " Constructor");
         this.canvas = canvas;  
         this.camera = new Camera(this);
-        this.camera.transform.location =  [.6, .5, -2] ;
+        this.camera.transform.location =  [0.01, 3, 2] ;
          
         this.gl = this.canvas.getContext('webgl');
         

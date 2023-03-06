@@ -44,8 +44,9 @@ export class CameraTransform {
             return;
         }
         
-        //mat4.lookAt     ( this.Matrix_transformation,this._location,this.targetVector,this.upVector);
-        mat4.translate  ( this.Matrix_transformation,mat4.create(),this._location);
+        mat4.translate  ( this.Matrix_transformation,this.Matrix_transformation,this._location);
+        mat4.lookAt     ( this.Matrix_transformation,this._location,this.targetVector,this.upVector);
+        
         //this.Matrix_transformation = this._Matrix_translation;
         //mat4.multiply   ( this.Matrix_transformation,this.Matrix_transformation,this.Matrix_transformation )
 
