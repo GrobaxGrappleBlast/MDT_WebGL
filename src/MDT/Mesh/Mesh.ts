@@ -51,12 +51,10 @@ export class Mesh extends MDTObject{
             p.draw(this.Material);
         }); 
         
-        const m = this.calcMatrix();
-        console.log("0:::"+m.toString() + "\n1:::" + this.environment.camera.cameraMatrix.toString() );
-        
-        this.gl.uniformMatrix4fv(this.Material.cameraMatrixUniformLocation, false,
+        this.gl.uniformMatrix4fv(
+            this.Material.cameraMatrixUniformLocation,
+            false,
             this.environment.camera.cameraMatrix
         );
- 
     }  
 }

@@ -8,12 +8,13 @@ import { MDTObject } from "./Objects/Object";
 export interface IEnvironment{
     gl : WebGLRenderingContext;
     camera : Camera;
+    canvas: HTMLCanvasElement;
 }
 export class Environment implements IEnvironment{
 
     private objects : {[name:string]:MDTObject}= {};
     public  camera  : Camera;
-    private canvas  : HTMLCanvasElement; 
+    public  canvas  : HTMLCanvasElement; 
 
     public gl : WebGLRenderingContext;  
 

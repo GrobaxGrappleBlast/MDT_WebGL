@@ -2,57 +2,6 @@
 
 import { IOnChangePublisher, IOnChangeSubscriber } from "../../MDTInterfaces/IOnChangeListener";
 import { vec3 , mat4 } from "gl-matrix";
- 
-
-export class CameraTransform {
-
-    public targetVector:vec3;
-    public upVector : vec3;
-    private _location : vec3;
-
-    public get location(){return this._location } 
-    public set location(v : vec3){ 
-        this._location = v;
-        this.isDirty = true;}
-  
-    public  _Matrix_translation    : mat4; 
-    public  Matrix_transformation : mat4;
-
-    public isDirty : boolean = true;
-
-    public constructor(){
-        
-        this.upVector = vec3.create();
-        this.upVector[2] = 1;
-
-        this.targetVector = vec3.create();
-
-        this._location = vec3.create();
-        this._Matrix_translation    = mat4.create(); 
-        this.Matrix_transformation = mat4.create();
-
-        mat4.identity(this._Matrix_translation    ); 
-        mat4.identity(this.Matrix_transformation );
-
-
-        this.update();  
-    }
-
-    public update(force : boolean = false){
-        
-        if( !force && !this.isDirty ){ 
-            return;
-        }
-        
-        mat4.translate  ( this.Matrix_transformation,this.Matrix_transformation,this._location);
-        mat4.lookAt     ( this.Matrix_transformation,this._location,this.targetVector,this.upVector);
-        
-        //this.Matrix_transformation = this._Matrix_translation;
-        //mat4.multiply   ( this.Matrix_transformation,this.Matrix_transformation,this.Matrix_transformation )
-
-        this.isDirty = false;  
-    } 
-}
 
 export class Transform {
 
