@@ -6,27 +6,40 @@ import { BaseObject, GlAsset } from "./Object";
 
 class CameraTransform {
 
-    private _targetVector:vec3;
-    public targetVector :vec3;
-
-    public upVector   : vec3;
-    private _location : vec3;
-    public get location()        { return this._location } 
-    public set location(v : vec3){ 
+    private _targetVector:vec3 = vec3.create();
+    public get targetVector()        { return this._targetVector } 
+    public set targetVector(v : vec3){ 
     
-        this.checkWithinbounds ( this.location, this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
-        this.checkoutisedbounds( this.location, this._INNERBOUNDS_MIN_VALUES , this._INNERBOUNDS_MAX_VALUES  )
+        this.checkWithinbounds ( v , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
+        let isValid = this.checkoutisedbounds( v , this.INNERBOUNDS_MIN        , this.INNERBOUNDS_MAX       );
+        if(!isValid)
+            return;
 
         this._location = v; 
         this.isDirty = true; 
     }
 
-    public  OUTERBOUNDS_MIN_VALUES  : vec3 = [-10,-10,-1];
-    public  OUTERBOUNDS_MAX_VALUES  : vec3 = [ 10, 10,10];
+    private _location : vec3 = vec3.create();
+    public get location()        { return this._location } 
+    public set location(v : vec3){ 
+    
+        this.checkWithinbounds ( v , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
+        //let isValid = this.checkoutisedbounds( v , this.INNERBOUNDS_MIN        , this.INNERBOUNDS_MAX       );
+        //if(!isValid)
+        //    return;
+        
+        this._location = v; 
+        this.isDirty = true; 
+    }
 
-    private _INNERBOUNDS_MIN        : vec3 = [-1,-1,-1 ];
-    private _INNERBOUNDS_MAX        : vec3 = [ 1, 1, 1 ];
- 
+    public upVector   : vec3 = [0,0,1];
+
+    public  OUTERBOUNDS_MIN_VALUES : vec3 = [-10,-10,-1];
+    public  OUTERBOUNDS_MAX_VALUES : vec3 = [ 10,10,10];
+
+    private INNERBOUNDS_MIN        : vec3 = [-1,-1,-1 ];
+    private INNERBOUNDS_MAX        : vec3 = [ 1, 1, 1 ];
+
     public  Matrix_translation    : mat4; 
     public  Matrix_transformation : mat4;
 
@@ -53,14 +66,14 @@ class CameraTransform {
     private checkWithinbounds   ( out : vec3, UpperBound : vec3, MinBound : vec3){
         // CANT GO TO FAR
         // MIN 
-        let isWithin = true;
-        if( out[0] < MinBound[0] ){ out[0] = MinBound[0]; isWithin = false; }
-        if( out[1] < MinBound[1] ){ out[1] = MinBound[1]; isWithin = false; }
-        if( out[2] < MinBound[2] ){ out[2] = MinBound[2]; isWithin = false; } 
+        
+        if( out[0] < MinBound[0] ){ out[0] = MinBound[0];  }
+        if( out[1] < MinBound[1] ){ out[1] = MinBound[1];  }
+        if( out[2] < MinBound[2] ){ out[2] = MinBound[2];  } 
         // MAX
-        if( out[0] > UpperBound[0] ){ out[0] = UpperBound[0]; isWithin = false;}
-        if( out[1] > UpperBound[1] ){ out[1] = UpperBound[1]; isWithin = false;}
-        if( out[2] > UpperBound[2] ){ out[2] = UpperBound[2]; isWithin = false;} 
+        if( out[0] > UpperBound[0] ){ out[0] = UpperBound[0]; }
+        if( out[1] > UpperBound[1] ){ out[1] = UpperBound[1]; }
+        if( out[2] > UpperBound[2] ){ out[2] = UpperBound[2]; } 
         return out;
     } 
     private checkoutisedbounds  ( vector : vec3, MinBound : vec3, MaxBound : vec3) : boolean{
@@ -81,14 +94,8 @@ class CameraTransform {
         this.checkWithinbounds(this.location, this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
         mat4.translate  ( this.Matrix_transformation,this.Matrix_transformation,this._location);
         mat4.lookAt     ( this.Matrix_transformation,this._location,this.targetVector,this.upVector);
-        
-        //this.Matrix_transformation = this._Matrix_translation;
-        //mat4.multiply   ( this.Matrix_transformation,this.Matrix_transformation,this.Matrix_transformation )
-
         this.isDirty = false;  
     } 
-     
-    
 }
 
 abstract class ManouverableCamera extends GlAsset{
