@@ -1,28 +1,32 @@
 
+import { vec3 } from "gl-matrix";
 import { RawGeometri } from "./Mesh/Geometri/RawGeometri";
 import { StandardMaterial } from "./Mesh/Materials/StandardMaterial";
 import { Mesh } from "./Mesh/Mesh";
 import { Camera } from "./Objects/Camera/Camera";
-import { MDTObject } from "./Objects/Object";
+import { BaseAsset, MDTObject } from "./Objects/Object";
 
 export interface IEnvironment{
     gl : WebGLRenderingContext;
     camera : Camera;
     canvas: HTMLCanvasElement;
 }
-export class Environment implements IEnvironment{
+export class Environment extends BaseAsset implements IEnvironment {
 
     private objects : {[name:string]:MDTObject}= {};
     public  camera  : Camera;
     public  canvas  : HTMLCanvasElement; 
 
-    public gl : WebGLRenderingContext;  
+    public gl : WebGLRenderingContext;
+    private origo : vec3 = [10,10,10];  
 
-    public constructor(CallerID :String,canvas : HTMLCanvasElement) {
+    public constructor( CallerID :String , canvas : HTMLCanvasElement ) {
+        super();
+        this.PRINTS_LOG_TO_CONSOLE = true;
+        this.toConsole(CallerID+ " Constructor");
         
-        console.log(CallerID+ " Constructor");
         this.canvas = canvas;  
-        this.camera = new Camera(this);
+        this.camera = new Camera(this,this.origo,[12,12,12]);
         this.camera.transform.location =  [0.01, 3, 2] ;
          
         this.gl = this.canvas.getContext('webgl');
@@ -44,10 +48,12 @@ export class Environment implements IEnvironment{
 
     public addObject( key:string , geo : RawGeometri ){
         this.objects[key] = new Mesh( this, [geo] , new StandardMaterial(this));
+        this.objects[key].transform.location = this.origo;
     }
     
     public addObjects( key:string , geo : RawGeometri[] ){
         this.objects[key] = new Mesh( this, geo , new StandardMaterial(this));
+        this.objects[key].transform.location = this.origo;
     }
 
     public async renderFrame(){

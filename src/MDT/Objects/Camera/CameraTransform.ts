@@ -1,12 +1,16 @@
 import { mat4, vec2, vec3 } from "gl-matrix";
+import { BaseAsset } from "../Object";
 
 
-abstract class cameraTransformAttributes{
+abstract class cameraTransformAttributes extends BaseAsset{
     
     // --- --- --- --- --- --- --- ---
     // 3D Vectors for current Position Data. 
     // --- --- --- --- --- --- --- ---
-    
+    public reset(origo:vec3, cameraPosition:vec3){
+            
+    }
+    public    origo : vec3;
     protected _targetVector : vec3 = vec3.create();
     protected _location     : vec3 = vec3.create();
     public    upVector      : vec3 = [0,0,1];
@@ -27,12 +31,20 @@ abstract class cameraTransformAttributes{
         this._MIN_DIST_TO_TARGET = Math.sqrt(v);
     }
 
+    protected _MAX_SQUARE_DIST_TO_TARGET = 36; 
+    protected _MAX_DIST_TO_TARGET = 6; 
+
+    public get MAX_SQUARE_DIST_TO_TARGET()        { return this._MAX_SQUARE_DIST_TO_TARGET } 
+    public set MAX_SQUARE_DIST_TO_TARGET(v : number){ 
+        this._MAX_SQUARE_DIST_TO_TARGET = v; 
+        this._MAX_DIST_TO_TARGET = Math.sqrt(v);
+    }
+
     public  isDirty : boolean = true;
     
     // --- --- --- --- --- --- --- --- ---
     // Matricees - Matricees - Matricees -
     // --- --- --- --- --- --- --- --- ---
-    public  Matrix_translation    : mat4 = mat4.create();  
     public  Matrix_transformation : mat4 = mat4.create();
 }
 
@@ -41,7 +53,6 @@ export class CameraTransform extends cameraTransformAttributes {
     // --- --- --- --- --- --- --- --- ---
     // Get Set of Protected Variables  ---
     // --- --- --- --- --- --- --- --- ---
-    
     public get targetVector()        { return this._targetVector } 
     public set targetVector(v : vec3){ 
         this.checkWithinbounds ( v , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
@@ -50,36 +61,39 @@ export class CameraTransform extends cameraTransformAttributes {
     }
 
     public get location()        { return this._location } 
-    public set location(v : vec3){ 
-        this.checkWithinbounds ( v , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
-        this.checkMinBounds( v );
+    public set location(v : vec3){  
+        this.checkDistance( v );
         this._location = v; 
-        this.isDirty = true; 
+        this.isDirty = true;   
     }
 
     public setLocAndTarget(location:vec3, target:vec3){
-        this.checkWithinbounds ( target   , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
+        this.checkWithinbounds ( target , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
         this._targetVector = target;
-        this.checkWithinbounds ( location , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
-        this.checkMinBounds( location );
+        this.checkDistance( location );
         this._location = location; 
         this.isDirty = true; 
+ 
     }
 
     // --- --- --- --- --- --- --- ---
     // Get Set of Protected Variables 
     // --- --- --- --- --- --- --- ---
-
     public constructor(){
         super();
         this.update();  
     }
 
-    private checkMinBounds( out: vec3 ){
+    
+
+    private checkDistance( out: vec3 ){
         const sqrdist = vec3.sqrDist( this.targetVector, out);
         if(sqrdist < this.MIN_SQUARE_DIST_TO_TARGET){
             vec3.normalize(out,out);
             vec3.scale(out,out,this._MIN_DIST_TO_TARGET);
+        }else if(sqrdist > this._MAX_SQUARE_DIST_TO_TARGET){
+            vec3.normalize(out,out);
+            vec3.scale(out,out,this._MAX_DIST_TO_TARGET);
         }
         return out;
     }
@@ -87,24 +101,30 @@ export class CameraTransform extends cameraTransformAttributes {
     private checkWithinbounds   ( out : vec3, UpperBound : vec3, MinBound : vec3){
         // CANT GO TO FAR
         // MIN  
-        if( out[0] < MinBound[0] ){ out[0] = MinBound[0];  }
-        if( out[1] < MinBound[1] ){ out[1] = MinBound[1];  }
-        if( out[2] < MinBound[2] ){ out[2] = MinBound[2];  } 
+        let outofBounds = false;
+        if( out[0] < MinBound[0] ){ out[0] = MinBound[0]; outofBounds = true;  }
+        if( out[1] < MinBound[1] ){ out[1] = MinBound[1]; outofBounds = true;  }
+        if( out[2] < MinBound[2] ){ out[2] = MinBound[2]; outofBounds = true;  } 
         // MAX
-        if( out[0] > UpperBound[0] ){ out[0] = UpperBound[0]; }
-        if( out[1] > UpperBound[1] ){ out[1] = UpperBound[1]; }
-        if( out[2] > UpperBound[2] ){ out[2] = UpperBound[2]; } 
+        if( out[0] > UpperBound[0] ){ out[0] = UpperBound[0]; outofBounds= true; }
+        if( out[1] > UpperBound[1] ){ out[1] = UpperBound[1]; outofBounds= true; }
+        if( out[2] > UpperBound[2] ){ out[2] = UpperBound[2]; outofBounds= true; } 
+        if(outofBounds){
+            this.toConsole("WAS OUT OF BOUNDS");
+        }
         return out;
     } 
      
     public  update              (force : boolean = false){
-        if( !force && !this.isDirty ){ 
+        
+        if( !(force || this.isDirty) ){ 
             return;
         } 
 
         this.checkWithinbounds(this.location, this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
-        mat4.translate  ( this.Matrix_transformation,this.Matrix_transformation,this._location);
+        //mat4.translate  ( this.Matrix_transformation,this.Matrix_transformation,this._location);
         mat4.lookAt     ( this.Matrix_transformation,this._location,this.targetVector,this.upVector);
         this.isDirty = false;  
+
     } 
 }

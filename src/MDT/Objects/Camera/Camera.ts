@@ -6,7 +6,6 @@ import { CameraController } from "./CameraController";
 import { ManouverableCamera } from "./ManouverableCamera";
 
 
-
 export class Camera extends CameraController {
 
     private projectionMatrix    : mat4 = mat4.create();
@@ -24,18 +23,15 @@ export class Camera extends CameraController {
 
     private isDirty : boolean = true;
 
-    public constructor(environment: IEnvironment,fov? : number, aspectRatio? : number, near?:number, far? : number ){   
-        super(environment);
-
-        this._fov           == fov            || this._fov          ;
-        this._aspectRatio   == aspectRatio    || this._aspectRatio  ;
-        this._near          == near           || this._near         ;
-        this._far           == far            || this._far          ;
+    public constructor(environment: IEnvironment, origo:vec3 , cameraLocation: vec3 ){   
         
+        super(environment);
+        
+        this.transform.reset(origo,cameraLocation);
         this.toPerspectiveCamera(this._fov,this._aspectRatio,this._near,this._far);
         this.update();
     }
-   
+    
     public update(): void {
         if( !this.isDirty && !this.transform.isDirty ){
             return;

@@ -5,6 +5,14 @@ import { vec3 , mat4 } from "gl-matrix";
 
 export class Transform {
 
+    /*
+        GOOGLE SIGER
+        // Extract the camera's position vector
+        const position: vec3 = vec3.create();
+        mat4.getTranslation(position, view);
+
+    */
+
     private _location : vec3 = vec3.create();
     private _rotation : vec3 = vec3.create();
     private _scale    : vec3 = vec3.create();

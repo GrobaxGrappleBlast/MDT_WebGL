@@ -70,16 +70,14 @@ abstract class MouseCamera extends ManouverableCamera{
             
             if(event.ctrlKey || event.metaKey){
                 // Zoom 
-                console.log("Zoom");
                 this.ZoomCamera(event.deltaY);
-            }
-            else if(event.shiftKey){
-                console.log("RAISE TARGET");
+            }else if(event.shiftKey){
+                // Raise Looking Angle
+                console.log("angle ");
                 this.RaiseTarget  ( event.deltaY );
-            }
-            else{
+            }else{
                 // Panning
-                console.log("PAN");
+                console.log("PAN ");
                 this.panCamera([event.deltaX, event.deltaY]);
             } 
         });
@@ -88,8 +86,7 @@ abstract class MouseCamera extends ManouverableCamera{
             event.preventDefault();
             console.log("MOUSE WHEEL SCROLL");
             
-        });
-
+        }); 
     }
 }
 
