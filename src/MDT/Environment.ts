@@ -2,7 +2,7 @@
 import { RawGeometri } from "./Mesh/Geometri/RawGeometri";
 import { StandardMaterial } from "./Mesh/Materials/StandardMaterial";
 import { Mesh } from "./Mesh/Mesh";
-import { Camera } from "./Objects/Camera";
+import { Camera } from "./Objects/Camera/Camera";
 import { MDTObject } from "./Objects/Object";
 
 export interface IEnvironment{
