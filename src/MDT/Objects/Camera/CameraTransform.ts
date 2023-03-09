@@ -8,7 +8,7 @@ abstract class cameraTransformAttributes extends BaseAsset{
     // 3D Vectors for current Position Data. 
     // --- --- --- --- --- --- --- ---
     protected _targetVector : vec3 = vec3.create();
-    protected _location     : vec3 = vec3.create();
+    protected _location     : vec3 = [2,2,2];
     public    upVector      : vec3 = [0,0,1];
     
     // --- --- --- --- --- --- --- ---
@@ -26,8 +26,8 @@ abstract class cameraTransformAttributes extends BaseAsset{
         this._MIN_DIST_TO_TARGET = Math.sqrt(v);
     }
 
-    protected _MAX_SQUARE_DIST_TO_TARGET = 36; 
-    protected _MAX_DIST_TO_TARGET = 6; 
+    protected _MAX_SQUARE_DIST_TO_TARGET = 15*15; 
+    protected _MAX_DIST_TO_TARGET = 15; 
 
     public get MAX_SQUARE_DIST_TO_TARGET()        { return this._MAX_SQUARE_DIST_TO_TARGET } 
     public set MAX_SQUARE_DIST_TO_TARGET(v : number){ 
@@ -57,8 +57,7 @@ export class CameraTransform extends cameraTransformAttributes {
 
     public get location()        { return this._location } 
     public set location(v : vec3){  
-        this.checkDistance( v );
-        this._location = v; 
+        this._location =this.checkDistance( v , this._location);
         this.isDirty = true;   
     }
  
@@ -72,16 +71,15 @@ export class CameraTransform extends cameraTransformAttributes {
 
     
 
-    private checkDistance( out: vec3 ){
-        const sqrdist = vec3.sqrDist( this.targetVector, out);
+    private checkDistance( newVec: vec3 , oldVec:vec3){
+        const sqrdist = vec3.sqrDist( this.targetVector, newVec);
         if(sqrdist < this.MIN_SQUARE_DIST_TO_TARGET){
-            vec3.normalize(out,out);
-            vec3.scale(out,out,this._MIN_DIST_TO_TARGET);
+           return oldVec;
         }else if(sqrdist > this._MAX_SQUARE_DIST_TO_TARGET){
-            vec3.normalize(out,out);
-            vec3.scale(out,out,this._MAX_DIST_TO_TARGET);
+            vec3.normalize(newVec,newVec);
+            vec3.scale(newVec,newVec,this._MAX_DIST_TO_TARGET);
         }
-        return out;
+        return newVec;
     }
 
     private checkWithinbounds   ( out : vec3, UpperBound : vec3, MinBound : vec3){

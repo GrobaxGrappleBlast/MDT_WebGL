@@ -27,7 +27,7 @@ export class Environment extends BaseAsset implements IEnvironment {
         
         this.canvas = canvas;  
         this.camera = new Camera(this);
-        this.camera.transform.location =  [0.01, 3, 2] ;
+        this.camera.transform.location =  [6,6,6] ;
          
         this.gl = this.canvas.getContext('webgl');
         

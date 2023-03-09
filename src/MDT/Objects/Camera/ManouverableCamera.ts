@@ -6,8 +6,8 @@ import { CameraTransform } from "./CameraTransform";
 
 export abstract class ManouverableCamera extends GlAsset{
 
-    private PANNING_ROTATION_SENTITIVITY = 0.005;
-    private PANNING_RAISE_SENTITIVITY    = 0.1;
+    private PANNING_ROTATION_SENTITIVITY = 0.03;
+    private PANNING_RAISE_SENTITIVITY    = 0.3;
     private ZOOM_SENTITIVITY             = 0.01;
 
     public transform : CameraTransform = new CameraTransform(); 
@@ -15,6 +15,7 @@ export abstract class ManouverableCamera extends GlAsset{
         super(environment);
     }
     
+    private lastloc :vec3 = vec3.create() ;
     protected cameraPan     ( pan   : vec2  ){
         
         const ScreenY = pan[1] * this.PANNING_RAISE_SENTITIVITY;
@@ -25,19 +26,21 @@ export abstract class ManouverableCamera extends GlAsset{
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
         // -- Check if is on top, for if it is, and remains unhandled it glitches
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-        if( Math.abs(this.transform.location[0]) <= 0.0001 || Math.abs(this.transform.location[1]) <= 0.0001 ){
+       
+        const loc = this.transform.location;
+        const tar = this.transform.targetVector;
+        if( loc[0]*loc[0] + loc[1]*loc[1] <= 0.1 ){
             // the camera is will glitch. 
             if(this.transform.location[2] < this.transform.targetVector[2]){
-                //console.log("STOP BELLOW THt " + this.transform.location );
-                Yradians = Math.abs(Yradians);
+                if(Yradians < 0)
+                    return;
             }else{
-                //console.log("STOP ATOP THE " + this.transform.location );
-                Yradians = Math.abs(Yradians);
+                if(Yradians > 0)
+                    return;
             }
         }
 
-        const loc = this.transform.location;
-        const tar = this.transform.targetVector;
+
  
         const viewDir = vec3.sub  (vec3.create(), loc, tar);
         const right   = vec3.cross(vec3.create(), viewDir, this.transform.upVector);
@@ -53,8 +56,16 @@ export abstract class ManouverableCamera extends GlAsset{
         let loc2 :vec3= [_loc[0],_loc[1],_loc[2]];
         
         vec3.rotateZ( loc2 as vec3 , loc2 , tar , ScreenX )
-        this.transform.location = loc2;
-        console.log(loc);
+    
+        // before adding, i want to ensure that this movement hasent overstepped the center. 
+        // if it has overstepped the center, then i wont apply the movement. 
+        let x_bothNeg = loc2[0] < 0 ? this.lastloc[0] <= 0 : this.lastloc[0] >= 0 ;
+        let y_bothNeg = loc2[1] < 0 ? this.lastloc[1] <= 0 : this.lastloc[1] >= 0 ;
+        if( (!x_bothNeg) && (!y_bothNeg) )
+            return;
+        
+        this.transform.location = loc2; 
+        this.lastloc = loc2;
     }
     
    

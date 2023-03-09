@@ -38,8 +38,17 @@ export class Core{
     private async StartMDT(canvas : HTMLCanvasElement ){ 
 
 
-        var geometri = new RawGeometri(new Float32Array([-0.5, 0.5, -0.5, -0.5, 0.0, -0.5,]),null,null);
-        var geometri2= new RawGeometri(new Float32Array([-0.5, 0.5,  0.5,  0.5, 0.5,  0.0,]),null,null);
+        var a = [
+            0.4,0.4,0.4,0.4,-0.4,0.4,-0.4,0.4,0.4,-0.4,0.4,0.4,0.4,-0.4,0.4,-0.4,-0.4,0.4,-0.4,0.4,0.4,-0.4,-0.4,0.4,-0.4,0.4,-0.4,-0.4,0.4,-0.4,-0.4,-0.4,0.4,-0.4,-0.4,-0.4,-0.4,0.4,-0.4,-0.4,-0.4,-0.4,0.4,0.4,-0.4,0.4,0.4,-0.4,-0.4,-0.4,-0.4,0.4,-0.4,-0.4,0.4,0.4,-0.4,0.4,-0.4,-0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,-0.4,0.4,0.4,-0.4,-0.4,0.4,0.4,0.4,0.4,0.4,-0.4,-0.4,0.4,0.4,-0.4,0.4,0.4,0.4,0.4,-0.4,-0.4,0.4,-0.4,0.4,-0.4,0.4,0.4,-0.4,-0.4,-0.4,-0.4,0.4,-0.4,-0.4,0.4,0.4,-0.4,-0.4,-0.4,-0.4,-0.4
+        ];
+        for (let i = 0; i < a.length; i++) {
+            a[i] =a[i] *4;
+            
+        }
+        console.log(a.toString())
+        var geometri2= new RawGeometri(new Float32Array([-2.0, 2.0,  2.0,  2.0, 2.0,  0.0,]),null,null);
+        var geometri = new RawGeometri(new Float32Array([-2.0, 2.0, -2.0, -2.0, 0.0, -2.0,]),null,null);
+        
         var geometri3= new RawGeometri( new Float32Array([
 
             // Front
@@ -91,11 +100,12 @@ export class Core{
             -.1, -.1, -.1,
         ]),null,null);
 
+        var geo = new RawGeometri( new Float32Array(a) , null, null)
 
         var env = new Environment("Core",canvas);
         env.addObject("tri1",geometri );
         env.addObject("tri2",geometri2);
-        env.addObject("box",geometri3);
+        env.addObject("box",geo);
          
         //var geometries = await loader.loadModel('./public/3dAssets/storage/model.gltf');
         //env.addObjects("firstLoaded",geometries);
