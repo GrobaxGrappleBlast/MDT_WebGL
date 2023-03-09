@@ -23,11 +23,11 @@ export class Camera extends CameraController {
 
     private isDirty : boolean = true;
 
-    public constructor(environment: IEnvironment, origo:vec3 , cameraLocation: vec3 ){   
+    public constructor(environment: IEnvironment ){   
         
         super(environment);
         
-        this.transform.reset(origo,cameraLocation);
+        
         this.toPerspectiveCamera(this._fov,this._aspectRatio,this._near,this._far);
         this.update();
     }
