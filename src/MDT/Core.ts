@@ -37,7 +37,7 @@ export class Core{
 
     private async StartMDT(canvas : HTMLCanvasElement ){ 
 
-
+        /*
         var a = [
             0.4,0.4,0.4,0.4,-0.4,0.4,-0.4,0.4,0.4,-0.4,0.4,0.4,0.4,-0.4,0.4,-0.4,-0.4,0.4,-0.4,0.4,0.4,-0.4,-0.4,0.4,-0.4,0.4,-0.4,-0.4,0.4,-0.4,-0.4,-0.4,0.4,-0.4,-0.4,-0.4,-0.4,0.4,-0.4,-0.4,-0.4,-0.4,0.4,0.4,-0.4,0.4,0.4,-0.4,-0.4,-0.4,-0.4,0.4,-0.4,-0.4,0.4,0.4,-0.4,0.4,-0.4,-0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,-0.4,0.4,0.4,-0.4,-0.4,0.4,0.4,0.4,0.4,0.4,-0.4,-0.4,0.4,0.4,-0.4,0.4,0.4,0.4,0.4,-0.4,-0.4,0.4,-0.4,0.4,-0.4,0.4,0.4,-0.4,-0.4,-0.4,-0.4,0.4,-0.4,-0.4,0.4,0.4,-0.4,-0.4,-0.4,-0.4,-0.4
         ];
@@ -99,17 +99,18 @@ export class Core{
             0.1, -.1, -.1,
             -.1, -.1, -.1,
         ]),null,null);
-
         var geo = new RawGeometri( new Float32Array(a) , null, null)
+        */
+        
 
         var env = new Environment("Core",canvas);
-        env.addObject("tri1",geometri );
-        env.addObject("tri2",geometri2);
-        env.addObject("box",geo);
+        //env.addObject("tri1",geometri );
+        //env.addObject("tri2",geometri2);
+        //env.addObject("box",geo);
          
-        //var geometries = await loader.loadModel('./public/3dAssets/storage/model.gltf');
-        //env.addObjects("firstLoaded",geometries);
-//
+        var geometries = await loader.loadModel('./public/3dAssets/storage/model.gltf');
+        env.addObjects("firstLoaded",geometries);
+
         this.environments.push( env  );
         this.Loop();
     }
