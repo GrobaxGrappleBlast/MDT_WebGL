@@ -25,13 +25,13 @@ export abstract class ManouverableCamera extends GlAsset{
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
         // -- Check if is on top, for if it is, and remains unhandled it glitches
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-        if( Math.abs(this.transform.location[0]) <= 0.01 || Math.abs(this.transform.location[1]) <= 0.01 ){
+        if( Math.abs(this.transform.location[0]) <= 0.0001 || Math.abs(this.transform.location[1]) <= 0.0001 ){
             // the camera is will glitch. 
-            if(this.transform.location[2] < 0){
-                console.log("STOP BELLOW THE " + this.transform.location );
+            if(this.transform.location[2] < this.transform.targetVector[2]){
+                //console.log("STOP BELLOW THt " + this.transform.location );
                 Yradians = Math.abs(Yradians);
             }else{
-                console.log("STOP ATOP THE " + this.transform.location );
+                //console.log("STOP ATOP THE " + this.transform.location );
                 Yradians = Math.abs(Yradians);
             }
         }
@@ -53,7 +53,8 @@ export abstract class ManouverableCamera extends GlAsset{
         let loc2 :vec3= [_loc[0],_loc[1],_loc[2]];
         
         vec3.rotateZ( loc2 as vec3 , loc2 , tar , ScreenX )
-        this.transform.location = loc;
+        this.transform.location = loc2;
+        console.log(loc);
     }
     
    

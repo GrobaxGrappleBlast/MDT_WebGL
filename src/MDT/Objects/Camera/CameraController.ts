@@ -77,7 +77,7 @@ abstract class MouseCamera extends ManouverableCamera{
                 this.raiseTarget  ( event.deltaY );
             }else{
                 // Panning
-                console.log("PAN ");
+                //console.log("PAN ");
                 this.cameraPan([event.deltaX, event.deltaY]);
             } 
         });
