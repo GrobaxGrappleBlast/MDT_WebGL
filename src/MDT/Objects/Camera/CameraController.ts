@@ -70,15 +70,15 @@ abstract class MouseCamera extends ManouverableCamera{
             
             if(event.ctrlKey || event.metaKey){
                 // Zoom 
-                this.ZoomCamera(event.deltaY);
+                this.cameraZoom(event.deltaY);
             }else if(event.shiftKey){
                 // Raise Looking Angle
                 console.log("angle ");
-                this.RaiseTarget  ( event.deltaY );
+                this.raiseTarget  ( event.deltaY );
             }else{
                 // Panning
                 console.log("PAN ");
-                this.panCamera([event.deltaX, event.deltaY]);
+                this.cameraPan([event.deltaX, event.deltaY]);
             } 
         });
 
@@ -121,10 +121,10 @@ abstract class touchscreenCamera extends MouseCamera{
                         this.last_ZOOM_Squarelength = sqrLength;
                         return;
                     }
-                    this.ZoomCamera( sqrLength - this.last_ZOOM_Squarelength );
+                    this.cameraZoom( sqrLength - this.last_ZOOM_Squarelength );
                     this.last_ZOOM_Squarelength = sqrLength;
                 }else{
-                    this.panCamera(deltaTouch);
+                    this.cameraPan(deltaTouch);
                 }
                 break;
             default:

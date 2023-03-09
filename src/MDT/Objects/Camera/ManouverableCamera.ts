@@ -15,47 +15,50 @@ export abstract class ManouverableCamera extends GlAsset{
         super(environment);
     }
     
-    protected panCamera     ( pan   : vec2  ){
+    protected cameraPan     ( pan   : vec2  ){
         
-        const newLoc = this.panCamera_UpDown(pan);
+        const ScreenY = pan[1] * this.PANNING_RAISE_SENTITIVITY;
         const ScreenX = pan[0] * this.PANNING_ROTATION_SENTITIVITY;
- 
-        let loc = this.transform.location;
-        let tar = this.transform.targetVector;
-        
-        //loc=vec3.rotateZ( loc , newLoc , tar , ScreenX )
 
-        this.transform.location = newLoc;
-    }
-   
-    private panCamera_UpDown(pan   : vec2) : vec3 {
-        
-        const ScreenY = pan[1];
-        let radians = (-ScreenY*this.PANNING_RAISE_SENTITIVITY) / 200 * 2 * Math.PI;
+        let Yradians = (-ScreenY ) / 200 * 2 * Math.PI;
+
+        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        // -- Check if is on top, for if it is, and remains unhandled it glitches
+        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
         if( Math.abs(this.transform.location[0]) <= 0.01 || Math.abs(this.transform.location[1]) <= 0.01 ){
-            // the camera is considered Stuck Atop a Model. 
+            // the camera is will glitch. 
             if(this.transform.location[2] < 0){
-                //console.log("STOP BELLOW THE " + this.transform.location );
+                console.log("STOP BELLOW THE " + this.transform.location );
+                Yradians = Math.abs(Yradians);
             }else{
-                //console.log("STOP ATOP THE " + this.transform.location );
+                console.log("STOP ATOP THE " + this.transform.location );
+                Yradians = Math.abs(Yradians);
             }
         }
 
-        let loc = this.transform.location;
-        let tar = this.transform.targetVector;
-        
+        const loc = this.transform.location;
+        const tar = this.transform.targetVector;
+ 
         const viewDir = vec3.sub  (vec3.create(), loc, tar);
         const right   = vec3.cross(vec3.create(), viewDir, this.transform.upVector);
         
+        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        // --  apply rotaion -- -- --  apply rotaion -- -- 
+        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        
         let a = mat4.create();
-        let b : vec4 = [ this.transform.location[0],this.transform.location[1],this.transform.location[2] , 1 ];
-        mat4.rotate         ( a, a, radians, right );
-        vec4.transformMat4  ( b, b, a ); 
- 
-        return [b[0],b[1],b[2]];
+        let _loc : vec4 = [ this.transform.location[0],this.transform.location[1],this.transform.location[2] , 1 ];
+        mat4.rotate         ( a, a, Yradians, right );
+        vec4.transformMat4  ( _loc, _loc, a ); 
+        let loc2 :vec3= [_loc[0],_loc[1],_loc[2]];
+        
+        vec3.rotateZ( loc2 as vec3 , loc2 , tar , ScreenX )
+        this.transform.location = loc;
     }
-
-    protected ZoomCamera    ( zoom  : number){
+    
+   
+    
+    protected cameraZoom    ( zoom  : number){
   
         console.log("ZOOM CMA");
         let _zoom = zoom * this.ZOOM_SENTITIVITY;
@@ -73,16 +76,20 @@ export abstract class ManouverableCamera extends GlAsset{
         
         //console.log(delta + "\n" + this.transform.location);
     }
-    protected RaiseTarget  ( raise : number  ){
+    
+    protected raiseTarget  ( raise : number  ){
         return;
         const target    = this.transform.targetVector;
         target[2]       += raise * this.PANNING_RAISE_SENTITIVITY;
         this.transform.targetVector= target;
     }
-    protected easeInOutQuad(t: number): number {
-        t /= 0.5;
-        if (t < 1) return 0.5 * t * t;
-        t--;
-        return -0.5 * (t * (t - 2) - 1);
-    } 
+  
 }
+
+
+/*
+    cameraPan
+    cameraZoom
+    cameraTarget
+
+*/

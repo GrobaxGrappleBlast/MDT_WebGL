@@ -7,10 +7,6 @@ abstract class cameraTransformAttributes extends BaseAsset{
     // --- --- --- --- --- --- --- ---
     // 3D Vectors for current Position Data. 
     // --- --- --- --- --- --- --- ---
-    public reset(origo:vec3, cameraPosition:vec3){
-            
-    }
-    public    origo : vec3;
     protected _targetVector : vec3 = vec3.create();
     protected _location     : vec3 = vec3.create();
     public    upVector      : vec3 = [0,0,1];
@@ -18,7 +14,6 @@ abstract class cameraTransformAttributes extends BaseAsset{
     // --- --- --- --- --- --- --- ---
     // CheckConstants 
     // --- --- --- --- --- --- --- ---
-    
     public  OUTERBOUNDS_MIN_VALUES : vec3 = [-10,-10,-1];
     public  OUTERBOUNDS_MAX_VALUES : vec3 = [ 10,10,10];
     
@@ -66,16 +61,7 @@ export class CameraTransform extends cameraTransformAttributes {
         this._location = v; 
         this.isDirty = true;   
     }
-
-    public setLocAndTarget(location:vec3, target:vec3){
-        this.checkWithinbounds ( target , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
-        this._targetVector = target;
-        this.checkDistance( location );
-        this._location = location; 
-        this.isDirty = true; 
  
-    }
-
     // --- --- --- --- --- --- --- ---
     // Get Set of Protected Variables 
     // --- --- --- --- --- --- --- ---
@@ -101,17 +87,13 @@ export class CameraTransform extends cameraTransformAttributes {
     private checkWithinbounds   ( out : vec3, UpperBound : vec3, MinBound : vec3){
         // CANT GO TO FAR
         // MIN  
-        let outofBounds = false;
-        if( out[0] < MinBound[0] ){ out[0] = MinBound[0]; outofBounds = true;  }
-        if( out[1] < MinBound[1] ){ out[1] = MinBound[1]; outofBounds = true;  }
-        if( out[2] < MinBound[2] ){ out[2] = MinBound[2]; outofBounds = true;  } 
+        if( out[0] < MinBound[0] ){ out[0] = MinBound[0];  }
+        if( out[1] < MinBound[1] ){ out[1] = MinBound[1];  }
+        if( out[2] < MinBound[2] ){ out[2] = MinBound[2];  } 
         // MAX
-        if( out[0] > UpperBound[0] ){ out[0] = UpperBound[0]; outofBounds= true; }
-        if( out[1] > UpperBound[1] ){ out[1] = UpperBound[1]; outofBounds= true; }
-        if( out[2] > UpperBound[2] ){ out[2] = UpperBound[2]; outofBounds= true; } 
-        if(outofBounds){
-            this.toConsole("WAS OUT OF BOUNDS");
-        }
+        if( out[0] > UpperBound[0] ){ out[0] = UpperBound[0]; }
+        if( out[1] > UpperBound[1] ){ out[1] = UpperBound[1]; }
+        if( out[2] > UpperBound[2] ){ out[2] = UpperBound[2]; } 
         return out;
     } 
      
@@ -121,8 +103,6 @@ export class CameraTransform extends cameraTransformAttributes {
             return;
         } 
 
-        this.checkWithinbounds(this.location, this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
-        //mat4.translate  ( this.Matrix_transformation,this.Matrix_transformation,this._location);
         mat4.lookAt     ( this.Matrix_transformation,this._location,this.targetVector,this.upVector);
         this.isDirty = false;  
 
