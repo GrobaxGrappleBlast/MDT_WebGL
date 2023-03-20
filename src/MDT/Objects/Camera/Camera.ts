@@ -12,7 +12,7 @@ export class Camera extends CameraController {
     public  cameraMatrix        : mat4 = mat4.create();
 
     protected _fov          : number = 75 * Math.PI/180;
-    protected _aspectRatio  : number = 0.5;
+    protected _aspectRatio  : number = 0.5; 
     protected _near         : number = 1e-4;
     protected _far          : number = 100.0;
 
