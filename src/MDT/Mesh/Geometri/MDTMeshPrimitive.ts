@@ -21,7 +21,7 @@ export class MDTMeshPrimitive extends GlAsset{
         
         this.faceIndexBuffer = this.environment.gl.createBuffer();
         this.environment.gl.bindBuffer(this.environment.gl.ELEMENT_ARRAY_BUFFER, this.faceIndexBuffer);
-        this.environment.gl.bufferData(this.environment.gl.ELEMENT_ARRAY_BUFFER,   this._geometri.FaceIndicies,this.environment.gl.STATIC_DRAW);
+        this.environment.gl.bufferData(this.environment.gl.ELEMENT_ARRAY_BUFFER,   this._geometri.indices,this.environment.gl.STATIC_DRAW);
 
         this.environment.gl.bindBuffer(this.environment.gl.ARRAY_BUFFER, null);  
     } 

@@ -38,7 +38,7 @@ export class Core{
  
         var env = new Environment("Core",canvas);
           
-        var geometries :RawGeometri[] = [] ;///= //await loader.loadModel('./public/3dAssets/storage/TEST.gltf');
+        var geometries = await loader.loadModel('./public/3dAssets/storage/TEST.gltf');
         const positions = [
             // Front face
             -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,

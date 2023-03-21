@@ -1,0 +1,1 @@
+https://github.com/larsjarlvik/webgl-gltf/tree/master/src/webgl-gltf/types
