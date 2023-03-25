@@ -1,8 +1,8 @@
 import { mat4 } from "gl-matrix";
+import { MDTFileMeshPrimitive } from "../../FileLoading/LoadedFile/MDTFile";
 import { Environment, IEnvironment } from "../Environment";
 import { MDTObject } from "../Objects/Object"; 
-import { MDTMeshPrimitive } from "./Geometri/MDTMeshPrimitive";
-import { RawGeometri } from "./Geometri/RawGeometri";
+import { MDTMeshPrimitive } from "./Geometri/MDTMeshPrimitive"; 
 import { StandardMaterial } from "./Materials/StandardMaterial";
 
 
@@ -11,7 +11,7 @@ export class Mesh extends MDTObject{
     private primitives   : MDTMeshPrimitive[] = [];
     public  Material     : StandardMaterial;  
 
-    public constructor(environment:IEnvironment, Geometries : RawGeometri[] ,Material : StandardMaterial){
+    public constructor(environment:IEnvironment, Geometries : MDTFileMeshPrimitive[] ,Material : StandardMaterial){
         super(environment);
         this.Material = Material;
         Geometries.forEach( p => {
@@ -42,7 +42,7 @@ export class Mesh extends MDTObject{
 
 
     public override draw(){ 
-    
+        //console.log("DRAW");
         this.transform.update();
         this.Material.use();
         
@@ -56,5 +56,6 @@ export class Mesh extends MDTObject{
             false,
             this.environment.camera.cameraMatrix
         );
+        ///console.log("DRAW DONE");
     }  
 }

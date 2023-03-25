@@ -1,6 +1,6 @@
 
-import { vec3 } from "gl-matrix";
-import { RawGeometri } from "./Mesh/Geometri/RawGeometri";
+import { vec3 } from "gl-matrix"; 
+import { MDTFileMeshPrimitive } from "../FileLoading/LoadedFile/MDTFile";
 import { StandardMaterial } from "./Mesh/Materials/StandardMaterial";
 import { Mesh } from "./Mesh/Mesh";
 import { Camera } from "./Objects/Camera/Camera";
@@ -46,22 +46,21 @@ export class Environment extends BaseAsset implements IEnvironment {
         this.gl.enable       (this.gl.DEPTH_TEST); 
     }
 
-    public addObject( key:string , geo : RawGeometri ){
+    public addObject( key:string , geo : MDTFileMeshPrimitive ){
         this.objects[key] = new Mesh( this, [geo] , new StandardMaterial(this));
         this.objects[key].transform.location = this.origo;
     }
     
-    public addObjects( key:string , geo : RawGeometri[] ){
+    public addObjects( key:string , geo : MDTFileMeshPrimitive[] ){
         this.objects[key] = new Mesh( this, geo , new StandardMaterial(this));
         this.objects[key].transform.location = this.origo;
     }
 
-    public async renderFrame(){
-        
+    public async renderFrame(){ 
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         for(const key in this.objects){
             this.objects[key].draw();
         }
-        this.camera.update(); 
+        this.camera.update();  
     }  
 }

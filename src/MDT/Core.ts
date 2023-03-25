@@ -2,12 +2,12 @@
  
 import { Environment, IEnvironment } from './Environment'; 
 import _vertexShaderCode    from './Mesh/Materials/shaders/VertexShader.glsl'
-import _fragementShaderCode from './Mesh/Materials/shaders/FragmentShader.glsl' 
-import { StandardMaterial } from './Mesh/Materials/StandardMaterial'; 
-import { Mesh } from './Mesh/Mesh';  
-import { RawGeometri } from './Mesh/Geometri/RawGeometri';
+import _fragementShaderCode from './Mesh/Materials/shaders/FragmentShader.glsl'  
 import { Loader } from '../FileLoading/Loader';
-import { mat4 } from 'gl-matrix';
+import { mat4 } from 'gl-matrix'; 
+import { MDTFileMeshPrimitive } from '../FileLoading/LoadedFile/MDTFile'; 
+import { AccessorComponentType } from '../FileLoading/GLTF/Interface/IGLTFAccessor';
+import { MDTBufferMaker } from '../FileLoading/LoadedFile/MDTBuffer';
 
 
 (window as any).MDTStart = (canvas : HTMLCanvasElement) :Core => {
@@ -37,8 +37,15 @@ export class Core{
 
  
         var env = new Environment("Core",canvas);
-          
-        var geometries = await loader.loadModel('./public/3dAssets/storage/TEST.gltf');
+        var MeshPrimitives: MDTFileMeshPrimitive[] = [];
+        /*
+        var Model = await loader.loadModel('./public/3dAssets/storage/TEST.gltf');
+        Model.meshes.forEach( m =>{
+            m.primitives.forEach(p=>{
+                MeshPrimitives.push(p);
+            })
+        })
+        */
         const positions = [
             // Front face
             -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
@@ -57,7 +64,7 @@ export class Core{
           
             // Left face
             -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0,
-          ];
+        ];
         const indices = [
         0,
         1,
@@ -96,26 +103,20 @@ export class Core{
         22,
         23, // left
         ];
-        geometries.push(new RawGeometri(new Float32Array(positions) , new Uint16Array(indices) ,null))
-        env.addObjects("firstLoaded",geometries);
 
-        console.log(geometries);
+        console.log("STOP HER")
+        var m = new MDTFileMeshPrimitive();
+        m.buffers.POSITION = MDTBufferMaker.createRAWBuffer(AccessorComponentType.FLOAT         , positions , "RAW MADE BUFFERS");
+        m.buffers.INDICIES = MDTBufferMaker.createRAWBuffer(AccessorComponentType.SHORT  , indices   , "RAW MADE BUFFERS");
+        m.name = "MANUAL MODEL"
 
+        MeshPrimitives.push(m);
+        env.addObjects("firstLoaded",MeshPrimitives);
+ 
         this.environments.push( env  );
         this.Loop();
     }
- 
-
     public Loop(){ 
-
-        // requestAnimationFrame(this.Loop.bind(this));
-        // mat4.rotateZ(this.matrix, this.matrix, Math.PI/2 / 70);
-        // mat4.rotateX(this.matrix, this.matrix, 0.09);
-        //
-        //  mat4.multiply(this.finalMatrix, this.projectionMatrix, this.matrix);
-        //  this.gl.uniformMatrix4fv(this.uniformLocations, false, this.finalMatrix);
-        //  this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexData.length / 3);
-
         this.environments.forEach( p => p.renderFrame() )
         requestAnimationFrame(this.Loop.bind(this));
     } 

@@ -1,39 +1,53 @@
 
-import { MDTMeshPrimitive } from "../MDT/Mesh/Geometri/MDTMeshPrimitive";
-import { RawGeometri } from "../MDT/Mesh/Geometri/RawGeometri";
-import { GLTFLoader } from "./GLTF/GLTFLoader";  
+import { MDTMeshPrimitive } from "../MDT/Mesh/Geometri/MDTMeshPrimitive"; 
+import { MDTFile } from "./LoadedFile/MDTFile";
 
  
-export interface IFileLoader{
-    supports() : string[];
-    parse(file:string): any;
+ 
+interface createFileCommand{
+    ( json : string) : MDTFile;
 }
 
-
- 
-
-
+class FileLoader{
+    public fileExtensions : string[] = [];
+    public command : createFileCommand;
+    public  constructor( extensions: string[], command: createFileCommand){
+        this.fileExtensions = extensions;
+        this.command = command;
+    }
+}
 export class Loader{
  
-    public async loadModel(url: string) : Promise<RawGeometri[]> {
- 
-        const loader = new GLTFLoader();
-        const meshes = await loader.loadModel(url); 
+    private fileLoaders : FileLoader[] = []; //: [ key : string ] ( (json : string ) => MDTFile );
 
-        let geometries : RawGeometri[]=[];
+    public constructor(){
+        this.fileLoaders.push(
+            new FileLoader(["gltf"], ( json )=>MDTFile.DeserializeGTLF(json) )
+        );
+
+    }
+
+
+    public async loadModel(url: string) : Promise<MDTFile> {
         
-        meshes.forEach( m  => { 
+        let arr = url.split(".");
+        const affix = arr[arr.length-1];
 
-            var a : RawGeometri = {
-                POSITION    : m.positions.data,
-                NORMAL      : m.normals.data,
-                TEXCOORD_0  : m.texCoord.data,
-                indices : null
+        var _loader :FileLoader = null;
+        this.fileLoaders.forEach(loader => {
+            if( loader.fileExtensions.includes(affix) ){
+                _loader = loader;
             }
-            geometries.push(a);
-        }); 
- 
-        return geometries;
+        });
+
+        if(_loader == null){
+            console.error("Could not Load file with extension of " + affix);
+        }
+
+        const file = await Loader.LoadFile(url);
+        var Model = _loader.command(file);
+        
+        return Model;
     } 
  
     private static async LoadFile(url: string): Promise<string> {
