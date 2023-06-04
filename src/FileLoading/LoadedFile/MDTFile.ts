@@ -7,15 +7,16 @@ import { JsonProperty, JsonDeserialize, JsonSerialize } from 'jackson-js';
 export class MDTFile{ 
 
     public meshes : MDTFileMesh[] = [] ;
-
+  
     public static DeserializeGTLF( file : string ): MDTFile{
         var gltf = JSON.parse(file) as IGLTF.GlTf;
         let MDT = new MDTFile();
+
         const Buffers : ArrayBufferLike[] = []; 
         gltf.buffers.forEach( buffer => {
             Buffers.push(MDTFile.desirialize_GLTF_URI(buffer.uri))
         })
-
+ 
         gltf.meshes.forEach( mesh => {
             MDT.meshes.push( MDTFileMesh.DeserializeObject(gltf,Buffers, mesh) );
         })
@@ -23,18 +24,19 @@ export class MDTFile{
     }
  
     public static desirialize_GLTF_URI(value : string ) : ArrayBuffer {
-        const data              = value.split(':')[1]; // Extract encoding type
-        const a                 = data.indexOf(',');
-        //const encodingArray     = data.substring(0, a).split(';');
+         
+        const data              = value.split(':')[1];  
+        const a                 = data.indexOf(','); 
         const RAWStringBuffer   = data.substring(a + 1);
-        // --- --- --- --- --- --- --- --- --- --- --- --- ---
-        // encodingArray = [application/octet-stream][base64]
-        // const encodingSpec = encodingArray[0];
-        // const encoding     = encodingArray[1];
-        //this.data = this.decodeGLTFBuffer(buffer,encodingArray[1]);
-        const encoder = new TextEncoder();
-        const _buffer = encoder.encode(RAWStringBuffer).buffer;
-        return _buffer  ;
+ 
+        const decodedString = atob(RAWStringBuffer);
+        const decodedDataView = new DataView(new ArrayBuffer(decodedString.length));
+
+        for (let i = 0; i < decodedString.length; i++) {
+            decodedDataView.setUint8(i, decodedString.charCodeAt(i));
+        }
+
+        return decodedDataView.buffer; 
     }
 }
 
@@ -50,8 +52,7 @@ export class MDTFileMesh{
             _mesh.primitives.push( MDTFileMeshPrimitive.DeserializeObject(parent,Buffers, prim) );
         });
         return _mesh;
-    }
-
+    } 
 }
 
 export class MDTFileMeshPrimitive{
@@ -69,7 +70,7 @@ export class MDTFileMeshPrimitive{
             const input = attr.split("_");
             const key   = input[0];
             const accessor  = parent.accessors  [ primitive.attributes[attr] ];
-            const bufferView= parent.bufferViews[ accessor.bufferView ];
+            const bufferView= parent.bufferViews[ accessor.bufferView ]; 
             switch(key){
             case "POSITION" :
                 prim.buffers.POSITION =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
@@ -89,7 +90,8 @@ export class MDTFileMeshPrimitive{
          }
          const accessor  = parent.accessors  [ primitive.indices];
          const bufferView= parent.bufferViews[ accessor.bufferView ]; 
-         prim.buffers.INDICIES = MDTBufferMaker.createGLTFBuffer( accessor.componentType, Buffers[bufferView.buffer], accessor, bufferView);
+         prim.buffers.INDICIES        = MDTBufferMaker.createGLTFBuffer( accessor.componentType, Buffers[bufferView.buffer], accessor, bufferView);
+         
          return prim;
     }
 }
@@ -104,16 +106,4 @@ export class MDTFileMeshPrimitiveAttribute{
     public TANGENT       : MDTBuffer<ArrayBuffer> ;
     public INDICIES      : MDTBuffer<ArrayBuffer> ; 
 }
-
-
-/*
- private parseBufferFloat( v : GlTf, accessorId : number ) : Float32Array {
-    const accessor  = v.accessors   [accessorId];
-    const view      = v.bufferViews [accessor.bufferView];
-    const buffer    = v.buffers     [view.buffer];
-    const size      = accessorSizes[accessor.type] as number;
-    return new Float32Array  ( buffer.uri , (accessor.byteOffset || 0) + (view.byteOffset || 0), accessor.count * size)
-  } 
-
-
-*/
+ 

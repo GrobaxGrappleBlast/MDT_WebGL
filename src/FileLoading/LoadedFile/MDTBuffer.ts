@@ -40,40 +40,44 @@ export class BaseMDTBuffer<T extends ArrayBuffer>{
     }  
 }
 export class MDTBuffer<T extends ArrayBuffer> extends BaseMDTBuffer<T>{   
-    public FromRAW( 
-            ctor : { new (...args: any[]): T }  ,
-            type : AccessorComponentType        ,
-            SIZE_PR_ELEMENT : getSizeCall       ,
-            rawData : number[] 
-        ): MDTBuffer<T>
-    {
+    public FromRAW(  
+        ctor : { new (...args: any[]): T }  ,
+        type : AccessorComponentType        ,
+        SIZE_PR_ELEMENT : getSizeCall       ,
+        rawData : number[] 
+    ): MDTBuffer<T>
+    { 
         this.TypeName = AccessorComponentType[type];
         this.SIZE_PER_ELEMENT = SIZE_PR_ELEMENT;
         this._ctor = ctor; 
         this.byteLength = rawData.length * this. SIZE_PER_ELEMENT();
         this.data = new this._ctor(rawData);   
-        this.length = (rawData).length; 
+        this.length = (rawData).length;  
         return this;
     }   
-    public FromGLTF( 
-            ctor : { new (...args: any[]): T } ,
-            type : AccessorComponentType ,
-            SIZE_PR_ELEMENT : getSizeCall,
-            buffer: ArrayBuffer , accessor: IGLTF.Accessor, bufferView: IGLTF.BufferView 
-        ): MDTBuffer<T>
-        { 
-            this.TypeName = AccessorComponentType[type];
-            this.SIZE_PER_ELEMENT = SIZE_PR_ELEMENT;
-            this._ctor = ctor; 
-            const offset    = (accessor.byteOffset || 0) + (bufferView.byteOffset || 0);
-            this.byteLength = bufferView.byteLength;
-            this.length     = accessor.count; 
-            this.data       = new this._ctor( buffer , offset , this.length);
-            return this;
-        }  
-}
- 
+    public FromGLTF(  
+        ctor : { new (...args: any[]): T } ,
+        type : AccessorComponentType ,
+        typeSize : number,
+        SIZE_PR_ELEMENT : getSizeCall,
+        buffer: ArrayBuffer , accessor: IGLTF.Accessor, bufferView: IGLTF.BufferView 
+    ): MDTBuffer<T>
+    { 
 
+
+        this.TypeName = AccessorComponentType[type];
+        this.SIZE_PER_ELEMENT = SIZE_PR_ELEMENT; 
+        this.byteLength = bufferView.byteLength;
+        this.length     = accessor.count * typeSize; 
+
+        const offset    = (accessor.byteOffset || 0) + (bufferView.byteOffset || 0);
+        this._ctor = ctor; 
+        this.data       = new this._ctor( buffer , offset , this.length); 
+ 
+        return this;
+    }  
+}
+  
 export class MDTBufferMaker{ 
     
     private constructor(){}
@@ -102,19 +106,21 @@ export class MDTBufferMaker{
         res.Name = name;
         return res;
     }
-    private static _createGLTFBuffer ( type : AccessorComponentType , buffer: ArrayBufferLike , accessor?: IGLTF.Accessor, bufferView?: IGLTF.BufferView ){
+    private static _createGLTFBuffer ( type : AccessorComponentType ,typeSize:number, buffer: ArrayBufferLike , accessor?: IGLTF.Accessor, bufferView?: IGLTF.BufferView ){
+        console.log("_createGLTFBuffer");
         switch(type){
-            case AccessorComponentType.BYTE:            return new MDTBuffer<Int8Array   >().FromGLTF(Int8Array   ,type, () => Int8Array   .BYTES_PER_ELEMENT, buffer, accessor,bufferView);
-            case AccessorComponentType.UNSIGNED_BYTE:   return new MDTBuffer<Uint8Array  >().FromGLTF(Uint8Array  ,type, () => Uint8Array  .BYTES_PER_ELEMENT, buffer, accessor,bufferView);        
-            case AccessorComponentType.SHORT:           return new MDTBuffer<Int16Array  >().FromGLTF(Int16Array  ,type, () => Int16Array  .BYTES_PER_ELEMENT, buffer, accessor,bufferView);
-            case AccessorComponentType.UNSIGNED_SHORT:  return new MDTBuffer<Uint16Array >().FromGLTF(Uint16Array ,type, () => Uint16Array .BYTES_PER_ELEMENT, buffer, accessor,bufferView);        
-            case AccessorComponentType.UNSIGNED_INT:    return new MDTBuffer<Uint32Array >().FromGLTF(Uint32Array ,type, () => Uint32Array .BYTES_PER_ELEMENT, buffer, accessor,bufferView);        
-            case AccessorComponentType.FLOAT:           return new MDTBuffer<Float32Array>().FromGLTF(Float32Array,type, () => Float32Array.BYTES_PER_ELEMENT, buffer, accessor,bufferView);
+            case AccessorComponentType.BYTE:            return new MDTBuffer<Int8Array   >().FromGLTF(Int8Array   ,type,typeSize, () => Int8Array   .BYTES_PER_ELEMENT, buffer, accessor,bufferView);
+            case AccessorComponentType.UNSIGNED_BYTE:   return new MDTBuffer<Uint8Array  >().FromGLTF(Uint8Array  ,type,typeSize, () => Uint8Array  .BYTES_PER_ELEMENT, buffer, accessor,bufferView);        
+            case AccessorComponentType.SHORT:           return new MDTBuffer<Int16Array  >().FromGLTF(Int16Array  ,type,typeSize, () => Int16Array  .BYTES_PER_ELEMENT, buffer, accessor,bufferView);
+            case AccessorComponentType.UNSIGNED_SHORT:  return new MDTBuffer<Uint16Array >().FromGLTF(Uint16Array ,type,typeSize, () => Uint16Array .BYTES_PER_ELEMENT, buffer, accessor,bufferView);        
+            case AccessorComponentType.UNSIGNED_INT:    return new MDTBuffer<Uint32Array >().FromGLTF(Uint32Array ,type,typeSize, () => Uint32Array .BYTES_PER_ELEMENT, buffer, accessor,bufferView);        
+            case AccessorComponentType.FLOAT:           return new MDTBuffer<Float32Array>().FromGLTF(Float32Array,type,typeSize, () => Float32Array.BYTES_PER_ELEMENT, buffer, accessor,bufferView);
         }
     }
     public  static  createGLTFBuffer ( type : AccessorComponentType , buffer: ArrayBufferLike , accessor?: IGLTF.Accessor, bufferView?: IGLTF.BufferView , name? : string){
+        const typeSize = BufferTypes[accessor.type].size;
         let res : MDTBuffer<Int8Array> | MDTBuffer<Uint8Array> | MDTBuffer<Int16Array> | MDTBuffer<Uint16Array> | MDTBuffer<Uint32Array> | MDTBuffer<Float32Array> = null;
-        res = MDTBufferMaker._createGLTFBuffer(type,buffer,accessor,bufferView);
+        res = MDTBufferMaker._createGLTFBuffer(type,typeSize,buffer,accessor,bufferView);
         res.Name = name;
         return res;
     }

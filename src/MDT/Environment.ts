@@ -57,6 +57,7 @@ export class Environment extends BaseAsset implements IEnvironment {
     }
 
     public async renderFrame(){ 
+        this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         for(const key in this.objects){
             this.objects[key].draw();

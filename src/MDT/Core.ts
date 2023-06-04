@@ -35,17 +35,16 @@ export class Core{
 
     private async StartMDT(canvas : HTMLCanvasElement ){ 
 
- 
         var env = new Environment("Core",canvas);
         var MeshPrimitives: MDTFileMeshPrimitive[] = [];
-        /*
+ 
         var Model = await loader.loadModel('./public/3dAssets/storage/TEST.gltf');
         Model.meshes.forEach( m =>{
             m.primitives.forEach(p=>{
                 MeshPrimitives.push(p);
             })
         })
-        */
+         /*
         const positions = [
             // Front face
             -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
@@ -65,7 +64,7 @@ export class Core{
             // Left face
             -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0,
         ];
-        const indices = [
+        const indices   = [
         0,
         1,
         2,
@@ -102,17 +101,15 @@ export class Core{
         20,
         22,
         23, // left
-        ];
+        ]; 
 
-        console.log("STOP HER")
         var m = new MDTFileMeshPrimitive();
-        m.buffers.POSITION = MDTBufferMaker.createRAWBuffer(AccessorComponentType.FLOAT         , positions , "RAW MADE BUFFERS");
-        m.buffers.INDICIES = MDTBufferMaker.createRAWBuffer(AccessorComponentType.SHORT  , indices   , "RAW MADE BUFFERS");
-        m.name = "MANUAL MODEL"
-
-        MeshPrimitives.push(m);
-        env.addObjects("firstLoaded",MeshPrimitives);
- 
+        m.buffers.POSITION = MDTBufferMaker.createRAWBuffer(AccessorComponentType.FLOAT , positions , "RAW MADE BUFFERS");
+        m.buffers.INDICIES = MDTBufferMaker.createRAWBuffer(AccessorComponentType.SHORT , indices   , "RAW MADE BUFFERS");
+        m.name = "MANUAL MODEL";
+        MeshPrimitives.push(m);  
+        */
+        env.addObjects("firstL2oaded",MeshPrimitives);
         this.environments.push( env  );
         this.Loop();
     }

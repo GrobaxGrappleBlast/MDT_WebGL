@@ -43,7 +43,12 @@ export class MDTMeshPrimitive extends GlAsset{
     public _draw(material : MaterialBase){
         
         material.use();  
-        this.environment.gl.drawElements( this.environment.gl.TRIANGLES, this._geometri.buffers.POSITION.length / 3, this.environment.gl.UNSIGNED_SHORT, 0);
+        console.log("DRAW CALL STOP HER");
+
+        
+
+        this.environment.gl.drawElements( this.environment.gl.TRIANGLES , this._geometri.buffers.POSITION.length / 3, this.environment.gl.UNSIGNED_SHORT, 0);
+        this.environment.gl.drawElements( this.environment.gl.POINTS    , this._geometri.buffers.POSITION.length / 3, this.environment.gl.UNSIGNED_SHORT, 0);
        
         return;
     }   
