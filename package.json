@@ -15,7 +15,6 @@
     "webgl-strict-types": "^1.0.5"
   },
   "dependencies": {
-    "gl-matrix": "^3.4.3",
-    "webgl": "^0.0.7"
-  } 
+    "gl-matrix": "^3.4.3"
+  }
 }

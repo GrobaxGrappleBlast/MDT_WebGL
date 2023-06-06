@@ -37,7 +37,6 @@ export class Camera extends CameraController {
     }
 
     public calcFOVFromScreenWidth( screenWidth : number , distanceToScreen : number  = 1){
-        console.log("calcFOVFromScreenWidth"); 
         const FOV = 2 * Math.atan(screenWidth / (2 * distanceToScreen ));
         this.fov = FOV;
     }
@@ -51,7 +50,6 @@ export class Camera extends CameraController {
 
     public toPerspectiveCamera (fov : number, aspectRatio : number, near:number, far : number ): void{
         this.isPerspective = true; 
-        console.log("toPerspectiveCamera")
         mat4.perspective(this._projectionMatrix, fov,aspectRatio,near,far);
     }
    
