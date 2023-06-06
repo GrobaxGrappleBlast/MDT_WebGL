@@ -18,44 +18,30 @@ export class Mesh extends MDTObject{
             this.primitives.push(new MDTMeshPrimitive(p,environment));
         });
     } 
-    
-    private finalMatrix:mat4;
-    private matrix : mat4;
-    public hasrun = false;
-    private calcMatrix(){
+      
+    public override draw(){  
         
-        this.matrix = mat4.create();
-        const projectionMatrix = mat4.create();
-        mat4.perspective(projectionMatrix, 
-            75 * Math.PI/180, // vertical field-of-view (angle, radians)
-            0.5, // aspect W/H
-            1e-4, // near cull distance
-            1e4 // far cull distance
-        );
-        
-        this.finalMatrix = mat4.create();
-        mat4.translate  ( this.matrix     , this.matrix     , [.2, .5, -2]   );
-        mat4.multiply   ( this.finalMatrix, projectionMatrix, this.matrix         );
-        
-        return this.finalMatrix;
-    }
-
-
-    public override draw(){ 
-        //console.log("DRAW");
+        //console.log("Draw Mesh");
         this.transform.update();
         this.Material.use();
         
+        // todo uniforms should be set in the material.
+        // or environments
         this.gl.uniformMatrix4fv(this.Material.objectTransformMatrixUniformLocation, false , (this.transform.Matrix_transformation));
         this.primitives.forEach( p => {
             p.draw(this.Material);
         }); 
         
         this.gl.uniformMatrix4fv(
-            this.Material.cameraMatrixUniformLocation,
+            this.Material.matrixProjection,
             false,
-            this.environment.camera.cameraMatrix
-        );
-        ///console.log("DRAW DONE");
+            this.environment.camera.projectionMatrix
+        ); 
+
+        this.gl.uniformMatrix4fv(
+            this.Material.matrixCameraView,
+            false,
+            this.environment.camera.viewMatrix()
+        ); 
     }  
 }

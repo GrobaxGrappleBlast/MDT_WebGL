@@ -11,7 +11,7 @@ export abstract class BaseAsset{
     }
 }
 
-export abstract class GlAsset extends BaseAsset{
+export abstract class GlAsset extends BaseAsset {
     
     protected environment: IEnvironment;
     protected get gl(){ return this.environment.gl };

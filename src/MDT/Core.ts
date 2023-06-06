@@ -38,76 +38,64 @@ export class Core{
         var env = new Environment("Core",canvas);
         var MeshPrimitives: MDTFileMeshPrimitive[] = [];
  
-        var Model = await loader.loadModel('./public/3dAssets/storage/TEST.gltf');
+        var Model = await loader.loadModel('./public/3dAssets/storage/baseStand.gltf');
         Model.meshes.forEach( m =>{
             m.primitives.forEach(p=>{
                 MeshPrimitives.push(p);
             })
         })
-         /*
+        
+        /*
         const positions = [
             // Front face
-            -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
+            -1.0, -1.0, 1.0,
+            1.0, -1.0, 1.0,
+            1.0, 1.0, 1.0,
+            -1.0, 1.0, 1.0,
           
             // Back face
-            -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0,
+            -1.0, -1.0, -1.0,
+            -1.0, 1.0, -1.0,
+            1.0, 1.0, -1.0,
+            1.0, -1.0, -1.0,
           
             // Top face
-            -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0,
+            -1.0, 1.0, -1.0,
+            -1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0,
+            1.0, 1.0, -1.0,
           
             // Bottom face
-            -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
+            -1.0, -1.0, -1.0,
+            1.0, -1.0, -1.0,
+            1.0, -1.0, 1.0,
+            -1.0, -1.0, 1.0,
           
             // Right face
-            1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0,
+            1.0, -1.0, -1.0,
+            1.0, 1.0, -1.0,
+            1.0, 1.0, 1.0,
+            1.0, -1.0, 1.0,
           
             // Left face
-            -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0,
-        ];
-        const indices   = [
-        0,
-        1,
-        2,
-        0,
-        2,
-        3, // front
-        4,
-        5,
-        6,
-        4,
-        6,
-        7, // back
-        8,
-        9,
-        10,
-        8,
-        10,
-        11, // top
-        12,
-        13,
-        14,
-        12,
-        14,
-        15, // bottom
-        16,
-        17,
-        18,
-        16,
-        18,
-        19, // right
-        20,
-        21,
-        22,
-        20,
-        22,
-        23, // left
+            -1.0, -1.0, -1.0,
+            -1.0, -1.0, 1.0,
+            -1.0, 1.0, 1.0,
+            -1.0, 1.0, -1.0,
         ]; 
-
+        const indices = [
+            0, 1, 2, 0, 2, 3, // Front face
+            4, 5, 6, 4, 6, 7, // Back face
+            8, 9, 10, 8, 10, 11, // Top face
+            12, 13, 14, 12, 14, 15, // Bottom face
+            16, 17, 18, 16, 18, 19, // Right face
+            20, 21, 22, 20, 22, 23, // Left face
+        ]; 
         var m = new MDTFileMeshPrimitive();
         m.buffers.POSITION = MDTBufferMaker.createRAWBuffer(AccessorComponentType.FLOAT , positions , "RAW MADE BUFFERS");
         m.buffers.INDICIES = MDTBufferMaker.createRAWBuffer(AccessorComponentType.SHORT , indices   , "RAW MADE BUFFERS");
         m.name = "MANUAL MODEL";
-        MeshPrimitives.push(m);  
+        MeshPrimitives.push(m);   
         */
         env.addObjects("firstL2oaded",MeshPrimitives);
         this.environments.push( env  );
@@ -115,6 +103,6 @@ export class Core{
     }
     public Loop(){ 
         this.environments.forEach( p => p.renderFrame() )
-        requestAnimationFrame(this.Loop.bind(this));
+        requestAnimationFrame(this.Loop.bind(this)); 
     } 
 } 

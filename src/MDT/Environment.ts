@@ -1,5 +1,5 @@
 
-import { vec3 } from "gl-matrix"; 
+import { vec2, vec3 } from "gl-matrix"; 
 import { MDTFileMeshPrimitive } from "../FileLoading/LoadedFile/MDTFile";
 import { StandardMaterial } from "./Mesh/Materials/StandardMaterial";
 import { Mesh } from "./Mesh/Mesh";
@@ -10,6 +10,7 @@ export interface IEnvironment{
     gl : WebGLRenderingContext;
     camera : Camera;
     canvas: HTMLCanvasElement;
+    getScreenSize() : vec2 ;
 }
 export class Environment extends BaseAsset implements IEnvironment {
 
@@ -18,17 +19,16 @@ export class Environment extends BaseAsset implements IEnvironment {
     public  canvas  : HTMLCanvasElement; 
 
     public gl : WebGLRenderingContext;
-    private origo : vec3 = [10,10,10];  
+    private origo : vec3 = [0,0,0];  
+    
 
     public constructor( CallerID :String , canvas : HTMLCanvasElement ) {
-        super();
-        this.PRINTS_LOG_TO_CONSOLE = true;
-        this.toConsole(CallerID+ " Constructor");
-        
+        super(); 
+ 
+        // todo : reeval this is suboptimal because the camera's matrix is made at constructor, but values are given after construction, and then we ask it to recalculate. 
         this.canvas = canvas;  
         this.camera = new Camera(this);
-        this.camera.transform.location =  [4,4,0] ;
-         
+        this.camera.transform.location =  [4,4,0];
         this.gl = this.canvas.getContext('webgl');
         
         if(!this.gl){
@@ -38,13 +38,36 @@ export class Environment extends BaseAsset implements IEnvironment {
             a Google Chrome, Firefox, Microsoft Edge and others.)
             `);
             return null;
-        }  
-
+        }    
         this.gl.clearColor(0.3,0.3,0.3,0.9);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT); 
-        this.gl.viewport     (0,0,canvas.width,canvas.height);
-        this.gl.enable       (this.gl.DEPTH_TEST); 
+        this.gl.clear   (this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);  
+        this.gl.enable  (this.gl.DEPTH_TEST); 
+  
+        // width : 1010. height : 695 
+        this.updateCameraForCanvas(canvas.clientWidth,canvas.clientHeight,canvas);
+        window.addEventListener('resize', () => {
+            this.updateCameraForCanvas(canvas.clientWidth,canvas.clientHeight,canvas);
+        }); 
     }
+
+    private updateCameraForCanvas(width:number, height:number, canvas:HTMLCanvasElement){ 
+        
+        
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio;
+        width  = rect.width * dpr;
+        height = rect.height * dpr;
+
+        //this.gl.viewport (0,0,  width,  height); 
+        this.camera.aspectRatio = (width) / (height);
+        // we are giving these the "wrong" information, but it results in the behavior we want.
+        this.camera.calcFOVFromScreenWidth( height, width); 
+        this.camera.recalculate(); 
+
+        console.log("canvas.clientLeft",canvas.clientLeft);
+       
+    }
+
 
     public addObject( key:string , geo : MDTFileMeshPrimitive ){
         this.objects[key] = new Mesh( this, [geo] , new StandardMaterial(this));
@@ -57,11 +80,20 @@ export class Environment extends BaseAsset implements IEnvironment {
     }
 
     public async renderFrame(){ 
+
+        this.camera.update();
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         for(const key in this.objects){
             this.objects[key].draw();
-        }
-        this.camera.update();  
+        } 
     }  
+
+ 
+    public getScreenSize() : vec2 {
+        var size : vec2 = [this.canvas.width,this.canvas.height];
+        return size;
+    }
+
+
 }

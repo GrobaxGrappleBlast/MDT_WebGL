@@ -50,15 +50,17 @@ export class CameraTransform extends cameraTransformAttributes {
     // --- --- --- --- --- --- --- --- ---
     public get targetVector()        { return this._targetVector } 
     public set targetVector(v : vec3){ 
+      
         this.checkWithinbounds ( v , this.OUTERBOUNDS_MAX_VALUES , this.OUTERBOUNDS_MIN_VALUES);
-        this._targetVector = v; 
+        this._targetVector = v;  
         this.isDirty = true; 
     }
 
     public get location()        { return this._location } 
     public set location(v : vec3){  
-        this._location =this.checkDistance( v , this._location);
-        this.isDirty = true;   
+        
+        this._location = this.checkDistance( v , this._location);
+        this.isDirty = true;    
     }
  
     // --- --- --- --- --- --- --- ---
@@ -96,11 +98,10 @@ export class CameraTransform extends cameraTransformAttributes {
     } 
      
     public  update              (force : boolean = false){
-        
+         
         if( !(force || this.isDirty) ){ 
             return;
-        } 
-
+        }  
         mat4.lookAt     ( this.Matrix_transformation,this._location,this.targetVector,this.upVector);
         this.isDirty = false;  
 

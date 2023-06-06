@@ -6,6 +6,8 @@ import { CameraTransform } from "./CameraTransform";
 
 export abstract class ManouverableCamera extends GlAsset{
 
+    protected lookDirection : vec3;
+
     private PANNING_ROTATION_SENTITIVITY = 0.03;
     private PANNING_RAISE_SENTITIVITY    = 0.3;
     private ZOOM_SENTITIVITY             = 0.01;
@@ -13,11 +15,13 @@ export abstract class ManouverableCamera extends GlAsset{
     public transform : CameraTransform = new CameraTransform(); 
     public constructor(environment: IEnvironment){   
         super(environment);
+        this.PRINTS_LOG_TO_CONSOLE = false;
     }
     
     private lastloc :vec3 = vec3.create() ;
     protected cameraPan     ( pan   : vec2  ){
         
+        this.toConsole("CAMERA PAN");
         const ScreenY = pan[1] * this.PANNING_RAISE_SENTITIVITY;
         const ScreenX = pan[0] * this.PANNING_ROTATION_SENTITIVITY;
 
@@ -25,12 +29,11 @@ export abstract class ManouverableCamera extends GlAsset{
 
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
         // -- Check if is on top, for if it is, and remains unhandled it glitches
-        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-       
+        // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
         const loc = this.transform.location;
         const tar = this.transform.targetVector;
         if( loc[0]*loc[0] + loc[1]*loc[1] <= 0.1 ){
-            // the camera is will glitch. 
+            // the camera will glitch, so we check if the glitch conditions are meet. . 
             if(this.transform.location[2] < this.transform.targetVector[2]){
                 if(Yradians < 0)
                     return;
@@ -39,11 +42,10 @@ export abstract class ManouverableCamera extends GlAsset{
                     return;
             }
         }
-
-
  
         const viewDir = vec3.sub  (vec3.create(), loc, tar);
         const right   = vec3.cross(vec3.create(), viewDir, this.transform.upVector);
+        this.lookDirection = viewDir;
         
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
         // --  apply rotaion -- -- --  apply rotaion -- -- 
@@ -67,12 +69,11 @@ export abstract class ManouverableCamera extends GlAsset{
         this.transform.location = loc2; 
         this.lastloc = loc2;
     }
-    
-   
-    
+     
     protected cameraZoom    ( zoom  : number){
-  
-        console.log("ZOOM CMA");
+   
+
+        this.toConsole("CAMERA ZOOM");
         let _zoom = zoom * this.ZOOM_SENTITIVITY;
         let delta = vec3.sub
         (
@@ -85,11 +86,12 @@ export abstract class ManouverableCamera extends GlAsset{
         vec3.add    ( delta , this.transform.targetVector , delta); 
  
         this.transform.location = delta;  
-        
-        //console.log(delta + "\n" + this.transform.location);
+         
     }
     
     protected raiseTarget  ( raise : number  ){
+
+        this.toConsole("CAMERA RAISE TARGET");
         return;
         const target    = this.transform.targetVector;
         target[2]       += raise * this.PANNING_RAISE_SENTITIVITY;
@@ -97,11 +99,4 @@ export abstract class ManouverableCamera extends GlAsset{
     }
   
 }
-
-
-/*
-    cameraPan
-    cameraZoom
-    cameraTarget
-
-*/
+ 

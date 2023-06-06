@@ -107,7 +107,6 @@ export class MDTBufferMaker{
         return res;
     }
     private static _createGLTFBuffer ( type : AccessorComponentType ,typeSize:number, buffer: ArrayBufferLike , accessor?: IGLTF.Accessor, bufferView?: IGLTF.BufferView ){
-        console.log("_createGLTFBuffer");
         switch(type){
             case AccessorComponentType.BYTE:            return new MDTBuffer<Int8Array   >().FromGLTF(Int8Array   ,type,typeSize, () => Int8Array   .BYTES_PER_ELEMENT, buffer, accessor,bufferView);
             case AccessorComponentType.UNSIGNED_BYTE:   return new MDTBuffer<Uint8Array  >().FromGLTF(Uint8Array  ,type,typeSize, () => Uint8Array  .BYTES_PER_ELEMENT, buffer, accessor,bufferView);        

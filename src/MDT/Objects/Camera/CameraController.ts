@@ -17,14 +17,11 @@ abstract class MouseCamera extends ManouverableCamera{
 
         canvas.addEventListener("mousedown", (event: MouseEvent) => {
             event.preventDefault();
-            if (event.button === 0) {
-                console.log("MOUSE DOWN LEFT");
+            if (event.button === 0) { 
                 this.isLeftButtonDown = true;
-            } else if (event.button === 1) {
-                console.log("MOUSE DOWN MID");
+            } else if (event.button === 1) { 
                 this.isMiddleButtonDown = true;
-            } else if (event.button === 2) {
-                console.log("MOUSE DOWN RIGHT");
+            } else if (event.button === 2) { 
                 this.isRightButtonDown = true;
             }
         });
@@ -33,19 +30,19 @@ abstract class MouseCamera extends ManouverableCamera{
             event.preventDefault();
             
             if (event.button === 0) {
-                console.log("MOUSE UP LEFT");
+                //"MOUSE UP LEFT"
                 this.isLeftButtonDown = false;
             } else if (event.button === 1) {
-                console.log("MOUSE UP MID");
+                //"MOUSE UP MID";
                 this.isMiddleButtonDown = false;
             } else if (event.button === 2) {
-                console.log("MOUSE UP Right");
+                //"MOUSE UP Right";
                 this.isRightButtonDown = false;
             }
         });
 
         canvas.addEventListener("mousemove", (event: MouseEvent) => {
-            //console.log("MOUSE MOVE");
+            
             const deltaX = event.clientX -  this.lastMouseX;
             const deltaY = event.clientY -  this.lastMouseY;
 
@@ -73,18 +70,18 @@ abstract class MouseCamera extends ManouverableCamera{
                 this.cameraZoom(event.deltaY);
             }else if(event.shiftKey){
                 // Raise Looking Angle
-                console.log("angle ");
+                
                 this.raiseTarget  ( event.deltaY );
             }else{
                 // Panning
-                //console.log("PAN ");
+                
                 this.cameraPan([event.deltaX, event.deltaY]);
             } 
         });
 
         canvas.addEventListener("scroll", (event: Event) => {
             event.preventDefault();
-            console.log("MOUSE WHEEL SCROLL");
+            
             
         }); 
     }
@@ -105,11 +102,10 @@ abstract class touchscreenCamera extends MouseCamera{
 
     private handleTouchStart(event: TouchEvent) {
         event.preventDefault();   
-        console.log("HANDLE TOUCH START");
         switch(event.touches.length){
             case 2:
 
-                console.log(`Touch at ${event.touches[0].clientX} , ${ event.touches[1].clientX}`);
+                // console.log(`Touch at ${event.touches[0].clientX} , ${ event.touches[1].clientX}`);
                 const deltaTouch : vec2 = [
                     Math.abs(event.touches[0].clientX - event.touches[1].clientX),
                     Math.abs(event.touches[0].clientY - event.touches[1].clientY)
@@ -133,7 +129,7 @@ abstract class touchscreenCamera extends MouseCamera{
       
     private handleTouchMove(event: TouchEvent) {
         event.preventDefault();
-        console.log("HANDLE TOUCH MOVE");
+        ("HANDLE TOUCH MOVE");
     }
 
     protected  setUpControlls(canvas: HTMLCanvasElement){
