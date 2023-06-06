@@ -58,14 +58,11 @@
             height = this.gl.canvas.height;
             width  = this.gl.canvas.width;
 
-
             this.gl.viewport (0,0,  width,  height); 
             this.camera.aspectRatio = (width) / (height);
             // we are giving these the "wrong" information, but it results in the behavior we want.
             this.camera.calcFOVFromScreenWidth( height, width); 
             this.camera.recalculate(); 
- 
-        
         }
 
 
