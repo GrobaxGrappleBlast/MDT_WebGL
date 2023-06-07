@@ -9,9 +9,6 @@ export abstract class MaterialBase extends GlAsset {
     public fragmentShader   : WebGLShader ;
     public ShaderProgram    : WebGLProgram; 
 
-    public abstract get vertexPosition(): number;
-    public abstract get vertexNormals(): number;
-
     public constructor(env:IEnvironment , vertexShadercode : string, fragmentShadercode:string){
         super(env);
         this.vertexShader   = env.gl.createShader(env.gl.VERTEX_SHADER  );
@@ -67,9 +64,7 @@ export abstract class MaterialBase extends GlAsset {
         shaderSetting(this.ShaderProgram);
     }
 
-    public use(){ 
-          
-        this.environment.gl.useProgram(this.ShaderProgram);
-        
+    public use(){  
+        this.environment.gl.useProgram(this.ShaderProgram); 
     }
 } 

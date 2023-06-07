@@ -1,8 +1,5 @@
 import { MDTBuffer, MDTBufferMaker } from "./MDTBuffer";
 import * as IGLTF from '../GLTF/Interface/IGLTFCombined';
-import { JsonProperty, JsonDeserialize, JsonSerialize } from 'jackson-js';
-
-
 
 export class MDTFile{ 
 
@@ -66,22 +63,27 @@ export class MDTFileMeshPrimitive{
     public static DeserializeObject( parent:IGLTF.GlTf ,Buffers: ArrayBufferLike[], primitive : IGLTF.MeshPrimitive ) : MDTFileMeshPrimitive {
         
         const prim = new MDTFileMeshPrimitive();
+        console.log("loading attrs");
         for( const attr in primitive.attributes){
             const input = attr.split("_");
             const key   = input[0];
             const accessor  = parent.accessors  [ primitive.attributes[attr] ];
             const bufferView= parent.bufferViews[ accessor.bufferView ]; 
+            
             switch(key){
             case "POSITION" :
-                prim.buffers.POSITION =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
+                prim.buffers.POSITION   =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
                 break;
             case "NORMAL"   :
-                prim.buffers.NORMAL   =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
+                prim.buffers.NORMAL     =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
                 break;
-            case "TEXCOORD" :break;
+            case "TEXCOORD" :
+                prim.buffers.TEXCOORD_0 =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
+                prim.buffers.TEXCOORD_1 =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
+                break;
             case "COLOR"    :break;
-            case "TANGENT"  :
-                prim.buffers.TANGENT  =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
+            case "TANGENT"  : 
+                prim.buffers.TANGENT    =  MDTBufferMaker.createGLTFBuffer( accessor.componentType,Buffers[bufferView.buffer], accessor, bufferView);
                 break;
             case "WEIGHTS"  :break;
             case "JOINTS"   :break;
@@ -100,9 +102,7 @@ export class MDTFileMeshPrimitiveAttribute{
     public POSITION      : MDTBuffer<ArrayBuffer> ;
     public NORMAL        : MDTBuffer<ArrayBuffer> ; 
     public TEXCOORD_0    : MDTBuffer<ArrayBuffer> ;
-    public TEXCOORD_1    : MDTBuffer<ArrayBuffer> ;
-    public COLOR_0       : MDTBuffer<ArrayBuffer> ;
-    public COLOR_1       : MDTBuffer<ArrayBuffer> ;
+    public TEXCOORD_1    : MDTBuffer<ArrayBuffer> ; 
     public TANGENT       : MDTBuffer<ArrayBuffer> ;
     public INDICIES      : MDTBuffer<ArrayBuffer> ; 
 }

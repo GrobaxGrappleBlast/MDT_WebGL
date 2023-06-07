@@ -1,26 +1,11 @@
-/*
-precision mediump float;
-
-uniform mat4 matrix_model;
-uniform mat4 matrix_view;
- 
-attribute vec3 position;
-attribute vec3 vertColor;
- 
-void main(){
-   float pointSize = 5.0;
-    gl_PointSize = pointSize;
-    gl_Position =  matrix_view * vec4(position, 1.0);
-    //gl_Position = vec4(vertPosition,1.0);
-}*/
-
-
 // Vertex shader
 
     attribute vec3 position;
     attribute vec3 normal;
-    attribute vec2 texCoord;
-
+    attribute vec3 tangent;
+    attribute vec2 texCoord1;
+    attribute vec2 texCoord2;
+    
     uniform mat4 matrix_model;
     uniform mat4 matrix_view;
     uniform mat4 matrix_projection;
@@ -28,7 +13,6 @@ void main(){
     varying vec3 FragPos;
     varying vec3 Normal;
     varying vec2 TexCoord;
-
 
     mat4 transpose(mat4 m) {
         return mat4(
@@ -38,7 +22,6 @@ void main(){
             m[0][3], m[1][3], m[2][3], m[3][3]
         );
     }
-
     mat4 inverse(mat4 m) {
         float
             a00 = m[0][0], a01 = m[0][1], a02 = m[0][2], a03 = m[0][3],
@@ -81,12 +64,11 @@ void main(){
         ) * det;
     }
 
-
     void main()
     {
         FragPos = vec3(matrix_model * vec4(position, 1.0));
         Normal = mat3(transpose(inverse(matrix_model))) * normal;
-        TexCoord = texCoord;
+        TexCoord = texCoord1;
         //FragPos = position;
 
         //gl_Position = matrix_view * vec4(FragPos, 1.0);
