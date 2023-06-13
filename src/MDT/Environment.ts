@@ -5,6 +5,7 @@
     import { Mesh } from "./Mesh/Mesh";
     import { Camera } from "./Objects/Camera/Camera";
     import { BaseAsset, MDTObject } from "./Objects/Object";
+import { RenderPassCombinator } from "./Mesh/Materials/RenderPassCombinator/RenderPassComb";
 
     export interface IEnvironment{
         gl : WebGLRenderingContext;
@@ -48,6 +49,8 @@
             window.addEventListener('resize', () => {
                 this.updateCameraForCanvas(canvas.clientWidth,canvas.clientHeight,canvas);
             }); 
+
+            this.framebufferConstruct();
         }
 
         private updateCameraForCanvas(width:number, height:number, canvas:HTMLCanvasElement){ 
@@ -63,20 +66,16 @@
             // we are giving these the "wrong" information, but it results in the behavior we want.
             this.camera.calcFOVFromScreenWidth( height, width); 
             this.camera.recalculate(); 
-        }
-
-
+        } 
         public addObject( key:string , geo : MDTFileMeshPrimitive ){
             this.objects[key] = new Mesh( this, [geo] , new StandardMaterial(this));
             this.objects[key].transform.location = this.origo;
-        }
-        
+        } 
         public addObjects( key:string , geo : MDTFileMeshPrimitive[] ){
             this.objects[key] = new Mesh( this, geo , new StandardMaterial(this));
             this.objects[key].transform.location = this.origo;
-        }
-
-        public async renderFrame(){ 
+        } 
+        public renderFrame(){ 
 
             this.camera.update();
             this.gl.enable(this.gl.DEPTH_TEST);
@@ -85,8 +84,78 @@
                 this.objects[key].draw();
             } 
         }  
+        
 
-    
+        private frameTexture: WebGLTexture;
+        private frameBuffer: WebGLFramebuffer;
+        private frameBufferAttachment : number;
+        private renderBuffer: WebGLRenderbuffer;
+        private renderPassCominer : RenderPassCombinator;
+
+        public framebufferConstruct() {
+            // Create and bind the frame buffer
+            this.frameBuffer    = this.gl.createFramebuffer();
+            this.frameTexture   = this.gl.createTexture(); 
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer);
+
+            // //////////////////////////////////////////////////////////
+            // // TEXTURE // TEXTURE // TEXTURE // TEXTURE // TEXTURE // 
+            // //////////////////////////////////////////////////////////
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.frameTexture);
+            this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, this.gl.canvas.width, this.gl.canvas.height, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, null);
+
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
+            
+            // //////////////////////////////////////////////////////////
+            // // ATTACHMENT // ATTACHMENT // ATTACHMENT // ATTACHMENT //
+            // //////////////////////////////////////////////////////////
+            this.frameBufferAttachment = this.gl.COLOR_ATTACHMENT0;
+            this.gl.framebufferTexture2D(this.gl.FRAMEBUFFER, this.frameBufferAttachment, this.gl.TEXTURE_2D, this.frameTexture, 0);
+
+
+            // //////////////////////////////////////////////////////////
+            // // DETACHMENT // DETACHMENT // DETACHMENT // DETACHMENT //
+            // //////////////////////////////////////////////////////////
+            this.gl.bindTexture(this.gl.TEXTURE_2D, null );
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+
+            this.renderPassCominer = new RenderPassCombinator(this);
+        }  
+
+        public async renderFrameToFrameBuffer(){
+
+
+            // Bind the frame buffer
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.frameBuffer);
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.frameTexture);
+
+            // CLEARING
+            this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+            // this.gl.clearColor(0, 0, 0, 0); 
+            // this.gl.clear(this.gl.COLOR_BUFFER_BIT| this.gl.DEPTH_BUFFER_BIT);
+
+            // Render objects to the frame buffer
+            this.renderFrame();
+
+            console.log("STOP HERE");
+            // UNBIND
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+            this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+
+            // CLEARING
+            this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+            // this.gl.clearColor(0, 0, 0, 0); 
+            // this.gl.clear(this.gl.COLOR_BUFFER_BIT| this.gl.DEPTH_BUFFER_BIT);
+
+            // COMBINING PASSES 
+            this.renderPassCominer.renderCombinedPass(this.frameTexture);
+        }
+
+
+
         public getScreenSize() : vec2 {
             var size : vec2 = [this.canvas.width,this.canvas.height];
             return size;

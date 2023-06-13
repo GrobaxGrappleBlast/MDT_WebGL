@@ -64,6 +64,28 @@ export abstract class MaterialBase extends GlAsset {
         shaderSetting(this.ShaderProgram);
     }
 
+    public bindBufferToAttribute( buffer : WebGLBuffer , materialAttributeIndex : number, bufferType:number , vectorSize : number, dataType : number, normalize : boolean = false, stride : number = 0, offset : number = 0){
+        if(buffer == null)
+            return;
+
+        if(materialAttributeIndex < 0)
+            return;
+        
+        this.environment.gl.bindBuffer              ( bufferType, buffer);
+        this.environment.gl.vertexAttribPointer     ( materialAttributeIndex, vectorSize, dataType, normalize, stride, offset);
+        this.environment.gl.enableVertexAttribArray ( materialAttributeIndex);
+    }
+    public createBuffer( bufferType:number, drawMethod : number , data : ArrayBuffer = null ) : WebGLBuffer{
+        if(data == null )
+            return null;
+        
+        var buffer = this.environment.gl.createBuffer();
+        this.environment.gl.bindBuffer(bufferType, buffer);
+        this.environment.gl.bufferData(bufferType, data, drawMethod);
+        this.environment.gl.bindBuffer(this.environment.gl.ARRAY_BUFFER, null);  // unbind
+        return buffer; 
+    } 
+
     public use(){  
         this.environment.gl.useProgram(this.ShaderProgram); 
     }

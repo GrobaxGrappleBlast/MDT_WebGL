@@ -17,7 +17,7 @@ export class Mesh extends MDTObject{
         Geometries.forEach( p => {
             this.primitives.push(new MDTMeshPrimitive(p,environment));
         });
-    } 
+    }
       
     public override draw(){  
         
@@ -28,20 +28,10 @@ export class Mesh extends MDTObject{
         // todo uniforms should be set in the material.
         // or environments
         this.gl.uniformMatrix4fv(this.Material.objectTransformMatrixUniformLocation, false , (this.transform.Matrix_transformation));
+        this.gl.uniformMatrix4fv(this.Material.matrixProjection,false,this.environment.camera.projectionMatrix); 
+        this.gl.uniformMatrix4fv(this.Material.matrixCameraView,false,this.environment.camera.viewMatrix()); 
         this.primitives.forEach( p => {
             p.draw(this.Material);
         }); 
-        
-        this.gl.uniformMatrix4fv(
-            this.Material.matrixProjection,
-            false,
-            this.environment.camera.projectionMatrix
-        ); 
-
-        this.gl.uniformMatrix4fv(
-            this.Material.matrixCameraView,
-            false,
-            this.environment.camera.viewMatrix()
-        ); 
     }  
 }
